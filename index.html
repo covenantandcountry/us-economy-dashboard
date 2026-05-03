@@ -1,0 +1,2853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which Party Actually Manages the Economy Better?</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e28;
+    --border: #252a38;
+    --dem: #2563eb;
+    --dem-light: rgba(37,99,235,0.15);
+    --dem-mid: rgba(37,99,235,0.35);
+    --rep: #dc2626;
+    --rep-light: rgba(220,38,38,0.15);
+    --rep-mid: rgba(220,38,38,0.35);
+    --split: #6b7280;
+    --split-light: rgba(107,114,128,0.12);
+    --gold: #f59e0b;
+    --green: #10b981;
+    --text: #e8eaf0;
+    --text-muted: #8892a4;
+    --text-dim: #4a5568;
+    --shock: #f59e0b;
+    --legis: #10b981;
+    --fed: #a78bfa;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: 56px;
+  }
+  .era-header-bar {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 2rem;
+    position: sticky;
+    top: 56px;
+    z-index: 99;
+  }
+  .era-header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .era-header-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    margin-right: 0.25rem;
+  }
+  .site-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gold);
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    flex: 1;
+    height: 100%;
+  }
+  .nav-tab {
+    padding: 0 1.25rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .nav-tab:hover { color: var(--text); border-bottom-color: var(--border); }
+  .nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .data-badge {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  /* MAIN */
+  .main { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+
+  /* TAB PANELS */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ============ OVERVIEW TAB ============ */
+  .overview-hero {
+    text-align: center;
+    padding: 4rem 2rem 3rem;
+    position: relative;
+  }
+  .overview-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+  .overview-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+  .overview-title span.dem { color: var(--dem); }
+  .overview-title span.rep { color: var(--rep); }
+  .overview-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 3rem;
+  }
+  .hero-stat {
+    background: var(--surface);
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    transition: background 0.2s;
+  }
+  .hero-stat:hover { background: var(--surface2); }
+  .hero-stat-value {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .hero-stat-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+  .hero-stat-sub {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-top: 0.3rem;
+  }
+
+  /* SNAPSHOT SCORECARD */
+  .snapshot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .party-card {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .party-card-header {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .party-card.dem .party-card-header { background: var(--dem-light); border-bottom: 1px solid rgba(37,99,235,0.2); }
+  .party-card.rep .party-card-header { background: var(--rep-light); border-bottom: 1px solid rgba(220,38,38,0.2); }
+  .party-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .party-card.dem .party-name { color: var(--dem); }
+  .party-card.rep .party-name { color: var(--rep); }
+  .party-overall-score {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 500;
+  }
+  .party-card.dem .party-overall-score { color: var(--dem); }
+  .party-card.rep .party-overall-score { color: var(--rep); }
+  .party-card-body { background: var(--surface); padding: 1.25rem 1.5rem; }
+  .tier-score-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .tier-score-row:last-child { border-bottom: none; }
+  .tier-score-label { color: var(--text-muted); }
+  .tier-score-val {
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+  .tier-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    margin: 0 0.75rem;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .tier-bar-fill { height: 100%; border-radius: 2px; }
+  .party-card.dem .tier-bar-fill { background: var(--dem); }
+  .party-card.rep .tier-bar-fill { background: var(--rep); }
+
+  /* WINNER BANNER */
+  .winner-banner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .winner-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+  .winner-text {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    flex: 1;
+  }
+  .winner-caveat {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 500px;
+  }
+
+  /* HOW TO READ */
+  .how-to-read {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+  }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .how-item { display: flex; flex-direction: column; gap: 0.4rem; }
+  .how-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  .how-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .how-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* LEGEND ROW */
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    padding: 1rem 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-muted); }
+  .legend-swatch { width: 24px; height: 10px; border-radius: 2px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .legend-line { width: 24px; height: 2px; border-top: 2px dashed; }
+
+  /* NAV CARDS */
+  .nav-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .nav-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .nav-card:hover { background: var(--surface2); border-color: var(--gold); transform: translateY(-2px); }
+  .nav-card-num {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+  }
+  .nav-card-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--text); }
+  .nav-card-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+  .nav-card-arrow { font-size: 1.1rem; color: var(--gold); margin-top: 0.75rem; display: block; }
+
+  /* ============ CHART TABS ============ */
+  .chart-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .chart-title {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .chart-subtitle { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem; line-height: 1.5; }
+
+  /* METRIC TOGGLES */
+  .metric-toggles {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .metric-btn {
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+  .metric-btn:hover { color: var(--text); border-color: var(--text-dim); }
+  .metric-btn.active { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 600; }
+
+  /* ANNOTATION TOGGLES */
+  .annotation-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .annotation-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 0.25rem;
+  }
+  .annot-btn {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    font-size: 0.72rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .annot-btn.shock { border-color: var(--shock); color: var(--shock); background: rgba(245,158,11,0.08); }
+  .annot-btn.shock.off { border-color: var(--border); color: var(--text-dim); background: transparent; }
+  .annot-btn.legis { border-color: var(--legis); color: var(--legis); background: rgba(16,185,129,0.08); }
+  .annot-btn.legis.off { border-color: var(--border); color: var(--text-dim); background: transparent; }
+  .annot-btn.fedpol { border-color: var(--fed); color: var(--fed); background: rgba(167,139,250,0.08); }
+  .annot-btn.fedpol.off { border-color: var(--border); color: var(--text-dim); background: transparent; }
+  .annot-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* CHART CONTAINER */
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+  }
+  .plotly-chart { width: 100%; height: 480px; }
+
+  /* CONTROL FLAGS */
+  .control-flags {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .ctrl-flag {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .ctrl-flag:hover { background: var(--surface2); }
+  .ctrl-flag.active { border-color: var(--gold); color: var(--gold); }
+  .ctrl-flag-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* TIER MINI SCORECARD */
+  .tier-mini-score {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+  .mini-score-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .mini-score-metric { font-size: 0.78rem; color: var(--text-muted); flex: 1; line-height: 1.3; }
+  .mini-score-bars { display: flex; flex-direction: column; gap: 0.3rem; }
+  .mini-bar-row { display: flex; align-items: center; gap: 0.4rem; }
+  .mini-bar-label { font-size: 0.6rem; font-family: var(--font-mono); width: 10px; }
+  .mini-bar-track { width: 60px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .mini-bar-fill { height: 100%; border-radius: 3px; }
+  .mini-bar-val { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); }
+
+  /* ============ SCORECARD TAB ============ */
+  .scorecard-header {
+    text-align: center;
+    padding: 2.5rem 0 2rem;
+  }
+  .scorecard-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .scorecard-sub { font-size: 0.85rem; color: var(--text-muted); max-width: 550px; margin: 0 auto; line-height: 1.6; }
+
+  .score-vs-banner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 2.5rem;
+  }
+  .score-party-block { text-align: center; }
+  .score-party-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  .score-big-num {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .score-party-block.dem .score-party-name,
+  .score-party-block.dem .score-big-num { color: var(--dem); }
+  .score-party-block.rep .score-party-name,
+  .score-party-block.rep .score-big-num { color: var(--rep); }
+  .score-vs {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--text-dim);
+  }
+  .score-winner-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    margin-top: 0.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .metric-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    margin-bottom: 1.5rem;
+  }
+  .metric-table th {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .metric-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .metric-table tr:last-child td { border-bottom: none; }
+  .metric-table tr:hover td { background: var(--surface2); }
+  .metric-table tbody { background: var(--surface); }
+  .score-cell { font-family: var(--font-mono); font-weight: 500; }
+  .score-cell.dem { color: var(--dem); }
+  .score-cell.rep { color: var(--rep); }
+  .winner-cell { text-align: center; }
+  .win-badge {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 0.65rem;
+    line-height: 20px;
+    text-align: center;
+    font-weight: 700;
+  }
+  .win-badge.dem { background: var(--dem); color: #fff; }
+  .win-badge.rep { background: var(--rep); color: #fff; }
+  .win-badge.tie { background: var(--split); color: #fff; }
+  .tier-section-head {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.6rem 1rem;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .pct-bar-wrap { display: flex; align-items: center; gap: 0.5rem; }
+  .pct-bar-track { width: 60px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .pct-bar-fill { height: 100%; border-radius: 3px; }
+
+  .lag-note {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* TOOLTIP OVERRIDE */
+  .js-plotly-plot .plotly .modebar { display: none !important; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .snapshot-grid { grid-template-columns: 1fr; }
+    .nav-cards { grid-template-columns: repeat(2, 1fr); }
+    .how-grid { grid-template-columns: 1fr 1fr; }
+    .score-vs-banner { grid-template-columns: 1fr; gap: 1rem; }
+  }
+
+  .president-table {
+    width:100%; border-collapse:collapse; font-size:0.8rem; margin-bottom:0.5rem;
+  }
+  .president-table th {
+    font-family:var(--font-mono); font-size:0.62rem; color:var(--text-dim);
+    text-transform:uppercase; letter-spacing:0.08em; padding:0.6rem 0.75rem;
+    text-align:left; border-bottom:1px solid var(--border); background:var(--surface2);
+    white-space:nowrap;
+  }
+  .president-table td {
+    padding:0.7rem 0.75rem; border-bottom:1px solid var(--border);
+    vertical-align:middle; background:var(--surface);
+  }
+  .president-table tr:hover td { background:var(--surface2); }
+  .president-table tr:last-child td { border-bottom:none; }
+  .rank-num {
+    font-family:var(--font-mono); font-size:0.7rem; color:var(--text-dim);
+    width:24px; text-align:right;
+  }
+  .pres-name { font-weight:600; color:var(--text); }
+  .pres-party-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:0.4rem; }
+  .pres-years { font-family:var(--font-mono); font-size:0.68rem; color:var(--text-dim); }
+  .composite-score {
+    font-family:var(--font-mono); font-weight:600; font-size:0.9rem;
+  }
+  .score-spark { display:flex; gap:3px; align-items:center; }
+  .spark-seg { height:6px; border-radius:2px; min-width:3px; }
+  .medal { font-size:0.9rem; }
+
+
+  .era-selector-wrap{margin-bottom:2rem;}
+  .era-selector-label{font-family:var(--font-mono);font-size:0.65rem;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+  .era-btns{display:flex;flex-wrap:wrap;gap:0.5rem;}
+  .era-btn{padding:0.45rem 1rem;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);font-size:0.78rem;font-family:var(--font-body);font-weight:500;cursor:pointer;transition:all 0.18s;white-space:nowrap;}
+  .era-btn:hover{color:var(--text);border-color:var(--text-dim);}
+  .era-btn.active{background:var(--gold);color:#000;border-color:var(--gold);font-weight:700;}
+  .era-indicator{display:inline-flex;align-items:center;gap:0.4rem;padding:0.25rem 0.75rem;border-radius:20px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);font-family:var(--font-mono);font-size:0.65rem;color:var(--gold);white-space:nowrap;}
+  .era-indicator-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+
+  .era-header-bar .era-btn {
+    padding: 0.28rem 0.75rem;
+    font-size: 0.72rem;
+    border-radius: 20px;
+  }
+
+  /* VIEW + PARTY CONTROLS */
+  .chart-controls-row {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 0.6rem; flex-wrap: wrap;
+  }
+  .ctrl-group { display: flex; align-items: center; gap: 0.35rem; }
+  .ctrl-group-label {
+    font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-right: 0.15rem;
+  }
+  .view-btn, .party-btn {
+    padding: 0.28rem 0.7rem; border-radius: 5px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text-muted); font-size: 0.72rem;
+    font-family: var(--font-body); font-weight: 500; cursor: pointer; transition: all 0.15s;
+  }
+  .view-btn:hover, .party-btn:hover { color: var(--text); border-color: var(--text-dim); }
+  .view-btn.active  { background: var(--surface2); color: var(--text); border-color: var(--text-dim); font-weight: 600; }
+  .party-btn.active-all  { background: #374151; color: #e8eaf0; border-color: #4b5563; font-weight: 600; }
+  .party-btn.active-dem  { background: var(--dem-light); color: var(--dem); border-color: var(--dem); font-weight: 600; }
+  .party-btn.active-rep  { background: var(--rep-light); color: var(--rep); border-color: var(--rep); font-weight: 600; }
+  .party-btn.active-split{ background: rgba(107,114,128,0.15); color: var(--split); border-color: var(--split); font-weight: 600; }
+
+  /* MULTI-METRIC */
+  .metric-btn.multi-active { outline: 2px solid var(--gold); outline-offset: 1px; }
+  .metric-btn.disabled { opacity: 0.35; cursor: not-allowed; }
+  .multi-hint {
+    font-size: 0.68rem; color: var(--text-dim); font-style: italic; margin-bottom: 0.35rem;
+  }
+
+  /* EVENT PICKER */
+  .event-picker-toggle {
+    display: flex; align-items: center; gap: 0.4rem; cursor: pointer;
+    font-size: 0.72rem; color: var(--text-muted); padding: 0.3rem 0;
+    border: none; background: none; font-family: var(--font-body);
+    margin-top: 0.25rem; user-select: none;
+  }
+  .event-picker-toggle:hover { color: var(--text); }
+  .event-picker-toggle .chevron { transition: transform 0.2s; display: inline-block; }
+  .event-picker-toggle.open .chevron { transform: rotate(180deg); }
+  .event-picker-panel {
+    display: none; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem 1.25rem; margin-top: 0.5rem; margin-bottom: 0.75rem;
+  }
+  .event-picker-panel.open { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+  .picker-col-title {
+    font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem;
+    grid-column: span 1;
+  }
+  .picker-check-list { display: flex; flex-direction: column; gap: 0.3rem; }
+  .picker-item {
+    display: flex; align-items: flex-start; gap: 0.45rem;
+    font-size: 0.75rem; color: var(--text-muted); cursor: pointer;
+    padding: 0.2rem 0.35rem; border-radius: 4px; transition: background 0.12s;
+  }
+  .picker-item:hover { background: var(--surface2); color: var(--text); }
+  .picker-item input[type=checkbox] { margin-top: 2px; accent-color: var(--gold); cursor: pointer; flex-shrink: 0; }
+  .picker-item.era-hidden { opacity: 0.3; pointer-events: none; }
+  .picker-all-row {
+    display: flex; gap: 0.5rem; margin-bottom: 0.6rem; padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+    grid-column: 1 / -1;
+  }
+  .picker-all-btn {
+    font-size: 0.68rem; padding: 0.2rem 0.6rem; border-radius: 4px;
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text-muted); cursor: pointer;
+  }
+  .picker-all-btn:hover { color: var(--text); }
+
+  /* ZOOM CONTROLS */
+  .chart-zoom-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+  .chart-zoom-inner {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .chart-zoom-inner::-webkit-scrollbar { height: 6px; }
+  .chart-zoom-inner::-webkit-scrollbar-track { background: transparent; }
+  .chart-zoom-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .chart-zoom-inner::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+  .zoom-controls {
+    display: flex; align-items: center; gap: 0.4rem;
+    margin-bottom: 0.4rem; justify-content: flex-end;
+  }
+  .zoom-btn {
+    width: 26px; height: 26px; border-radius: 5px;
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text-muted); font-size: 1rem; line-height: 1;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; user-select: none;
+  }
+  .zoom-btn:hover { color: var(--text); border-color: var(--text-dim); }
+  .zoom-label {
+    font-family: var(--font-mono); font-size: 0.62rem;
+    color: var(--text-dim); min-width: 36px; text-align: center;
+  }
+  .zoom-reset {
+    font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 4px;
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text-dim); cursor: pointer;
+  }
+  .zoom-reset:hover { color: var(--text); }
+
+  /* TRAJECTORY / INHERITED CONDITIONS */
+  .score-mode-toggle {
+    display: flex; gap: 0.35rem; margin-bottom: 1.5rem;
+    background: var(--surface2); border-radius: 8px; padding: 0.25rem;
+    width: fit-content;
+  }
+  .score-mode-btn {
+    padding: 0.4rem 1.1rem; border-radius: 6px; border: none;
+    font-size: 0.78rem; font-family: var(--font-body); font-weight: 500;
+    cursor: pointer; transition: all 0.2s; color: var(--text-muted);
+    background: transparent;
+  }
+  .score-mode-btn.active {
+    background: var(--surface); color: var(--text); font-weight: 600;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .traj-col { color: #60a5fa; }
+  .abs-col  { color: var(--gold); }
+
+  .inherited-row {
+    display: none; background: var(--surface2);
+  }
+  .inherited-row.open { display: table-row; }
+  .inherited-cells {
+    display: flex; gap: 1.5rem; padding: 0.75rem 1rem;
+    flex-wrap: wrap; align-items: center;
+  }
+  .inh-item { display: flex; flex-direction: column; gap: 0.15rem; }
+  .inh-label { font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.07em; }
+  .inh-value { font-family: var(--font-mono); font-size: 0.88rem; font-weight: 600; }
+  .inh-context { font-size: 0.65rem; font-style: italic; }
+  .inh-toggle-btn {
+    font-size: 0.65rem; color: var(--text-dim); background: none; border: none;
+    cursor: pointer; padding: 0; font-family: var(--font-body);
+    display: flex; align-items: center; gap: 0.25rem;
+  }
+  .inh-toggle-btn:hover { color: var(--text-muted); }
+  .score-diff {
+    font-size: 0.68rem; font-family: var(--font-mono);
+    margin-left: 0.3rem;
+  }
+  .score-diff.better { color: #10b981; }
+  .score-diff.worse  { color: #f87171; }
+  .score-diff.same   { color: var(--text-dim); }
+  .both-scores {
+    display: flex; flex-direction: column; gap: 0.2rem;
+  }
+  .both-score-row {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.72rem;
+  }
+  .both-score-tag {
+    font-size: 0.6rem; padding: 0.05rem 0.35rem; border-radius: 3px;
+    font-family: var(--font-mono); min-width: 28px; text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="site-title">US Economy 1950–2024</div>
+    <nav class="nav-tabs">
+      <div class="nav-tab active" onclick="switchTab('overview')">Overview</div>
+      <div class="nav-tab" onclick="switchTab('tier1')">Tier 1 — Core</div>
+      <div class="nav-tab" onclick="switchTab('tier2')">Tier 2 — Supporting</div>
+      <div class="nav-tab" onclick="switchTab('tier3')">Tier 3 — Context</div>
+      <div class="nav-tab" onclick="switchTab('scorecard')">Scorecard</div>
+    </nav>
+    <div class="data-badge">Sources: BLS · BEA · FRED · Census · OMB</div>
+  </div>
+</header>
+
+<div class="era-header-bar">
+  <div class="era-header-inner">
+    <span class="era-header-label">Era:</span>
+    <button class="era-btn active" onclick="setEra('all',this)">All (1950&ndash;2024)</button>
+    <button class="era-btn" onclick="setEra('postwar',this)">Postwar Boom (1950&ndash;1969)</button>
+    <button class="era-btn" onclick="setEra('stagflation',this)">Stagflation Era (1970&ndash;1979)</button>
+    <button class="era-btn" onclick="setEra('reagan',this)">Reagan Revolution (1980&ndash;2000)</button>
+    <button class="era-btn" onclick="setEra('modern',this)">Modern Era (2001&ndash;2024)</button>
+    <button class="era-btn" onclick="setEra('prereagan',this)">Pre-Reagan (1950&ndash;1979)</button>
+    <button class="era-btn" onclick="setEra('postreagan',this)">Post-Reagan (1980&ndash;2024)</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ======== OVERVIEW TAB ======== -->
+<div id="tab-overview" class="tab-panel active">
+  <div class="overview-hero">
+    <div class="overview-eyebrow">75 Years · 13 Presidents · 38 Congresses · 100+ Economic Events</div>
+    <h1 class="overview-title">Which Party Actually<br>Manages the Economy Better?</h1>
+    <p class="overview-subtitle">A data-driven analysis of U.S. economic performance from 1950 to 2024 — scored across 21 metrics, weighted by tier, adjusted for political lag, and overlaid with every major shock, law, and policy shift that shaped the numbers.</p>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-value" style="color:var(--gold)">75</div>
+      <div class="hero-stat-label">Years of Data</div>
+      <div class="hero-stat-sub">1950 — 2024</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value" style="color:var(--text)">20</div>
+          <div class="hero-stat-label">Economic Metrics</div>
+      <div class="hero-stat-sub">5T1 · 5T2 Scored · 9T3 Context</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value" style="color:var(--dem)">7</div>
+      <div class="hero-stat-label">Democratic Presidents</div>
+      <div class="hero-stat-sub">Truman → Biden</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value" style="color:var(--rep)">6</div>
+      <div class="hero-stat-label">Republican Presidents</div>
+      <div class="hero-stat-sub">Eisenhower → Trump</div>
+    </div>
+  </div>
+
+
+  <!-- ERA SELECTOR -->
+  <div class="era-selector-wrap">
+    <div class="era-selector-label">Filter by Era &mdash; scores, rankings &amp; charts update automatically</div>
+    <div class="era-btns">
+      <button class="era-btn active" onclick="setEra('all',this)">All (1950&ndash;2024)</button>
+      <button class="era-btn" onclick="setEra('postwar',this)">Postwar Boom (1950&ndash;1969)</button>
+      <button class="era-btn" onclick="setEra('stagflation',this)">Stagflation Era (1970&ndash;1979)</button>
+      <button class="era-btn" onclick="setEra('reagan',this)">Reagan Revolution (1980&ndash;2000)</button>
+      <button class="era-btn" onclick="setEra('modern',this)">Modern Era (2001&ndash;2024)</button>
+      <button class="era-btn" onclick="setEra('prereagan',this)">Pre-Reagan (1950&ndash;1979)</button>
+      <button class="era-btn" onclick="setEra('postreagan',this)">Post-Reagan (1980&ndash;2024)</button>
+    </div>
+  </div>
+  <!-- SNAPSHOT SCORECARD -->
+  <div class="section-label">📊 Party Scorecard Snapshot</div>
+  <div class="snapshot-grid">
+    <div class="party-card dem">
+      <div class="party-card-header">
+        <div>
+          <div class="party-name">Democratic</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.2rem" id="dem-era-label">Presidencies 1950–2024</div>
+        </div>
+        <div>
+          <div class="party-overall-score" id="dem-overall-score">—</div>
+          <div style="font-size:0.62rem;color:var(--text-dim);text-align:right">Overall Pct.</div>
+        </div>
+      </div>
+      <div class="party-card-body">
+        <div class="tier-score-row">
+          <span class="tier-score-label">Tier 1 · Core Metrics</span>
+          <div class="tier-bar"><div class="tier-bar-fill" id="dem-t1-bar" style="width:0%"></div></div>
+          <span class="tier-score-val" id="dem-t1-val" style="color:var(--dem)">—</span>
+        </div>
+        <div class="tier-score-row">
+          <span class="tier-score-label">Tier 2 · Supporting</span>
+          <div class="tier-bar"><div class="tier-bar-fill" id="dem-t2-bar" style="width:0%"></div></div>
+          <span class="tier-score-val" id="dem-t2-val" style="color:var(--dem)">—</span>
+        </div>
+        <div class="tier-score-row">
+          <span class="tier-score-label">Tier 3 · Context (unscored)</span>
+          <div class="tier-bar"><div class="tier-bar-fill" id="dem-t3-bar" style="width:0%"></div></div>
+          <span class="tier-score-val" id="dem-t3-val" style="color:var(--text-dim)">ref.</span>
+        </div>
+      </div>
+    </div>
+    <div class="party-card rep">
+      <div class="party-card-header">
+        <div>
+          <div class="party-name">Republican</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.2rem" id="rep-era-label">Presidencies 1950–2024</div>
+        </div>
+        <div>
+          <div class="party-overall-score" id="rep-overall-score">—</div>
+          <div style="font-size:0.62rem;color:var(--text-dim);text-align:right">Overall Pct.</div>
+        </div>
+      </div>
+      <div class="party-card-body">
+        <div class="tier-score-row">
+          <span class="tier-score-label">Tier 1 · Core Metrics</span>
+          <div class="tier-bar"><div class="tier-bar-fill" id="rep-t1-bar" style="width:0%"></div></div>
+          <span class="tier-score-val" id="rep-t1-val" style="color:var(--rep)">—</span>
+        </div>
+        <div class="tier-score-row">
+          <span class="tier-score-label">Tier 2 · Supporting</span>
+          <div class="tier-bar"><div class="tier-bar-fill" id="rep-t2-bar" style="width:0%"></div></div>
+          <span class="tier-score-val" id="rep-t2-val" style="color:var(--rep)">—</span>
+        </div>
+        <div class="tier-score-row">
+          <span class="tier-score-label">Tier 3 · Context (unscored)</span>
+          <div class="tier-bar"><div class="tier-bar-fill" id="rep-t3-bar" style="width:0%"></div></div>
+          <span class="tier-score-val" id="rep-t3-val" style="color:var(--text-dim)">ref.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- HOW TO READ -->
+  <div class="how-to-read">
+    <div class="section-label">How to Read This Report</div>
+    <div class="how-grid">
+      <div class="how-item">
+        <div class="how-icon" style="background:rgba(37,99,235,0.12)">🏛️</div>
+        <div class="how-title">Party Bands</div>
+        <div class="how-desc">Blue shading = Democratic president, Red = Republican, Gray = split government. Congressional control shown as a separate stripe below the chart.</div>
+      </div>
+      <div class="how-item">
+        <div class="how-icon" style="background:rgba(245,158,11,0.12)">⚡</div>
+        <div class="how-title">Event Markers</div>
+        <div class="how-desc">Toggle Economic Shocks (amber), Legislation (green), and Fed Policy (purple) on/off. Hover any marker for full details on the event and its measured impact.</div>
+      </div>
+      <div class="how-item">
+        <div class="how-icon" style="background:rgba(16,185,129,0.12)">📐</div>
+        <div class="how-title">Scoring Method</div>
+        <div class="how-desc">Scores are percentile ranks (0–100) vs. all administrations since 1950. A score of 78 means that administration outperformed 78% of all others on that metric. Hover any score to also see the Z-score.</div>
+      </div>
+      <div class="how-item">
+        <div class="how-icon" style="background:rgba(167,139,250,0.12)">⏱️</div>
+        <div class="how-title">Lag Attribution</div>
+        <div class="how-desc">Presidents are credited for outcomes 6–12 months after taking office. Congress: 12–18 months. Legislation windows show pre/immediate/long-term impact separately.</div>
+      </div>
+      <div class="how-item">
+        <div class="how-icon" style="background:rgba(107,114,128,0.12)">🔀</div>
+        <div class="how-title">Unified Gov Flag</div>
+        <div class="how-desc">A bold border highlights periods when one party controlled the White House + both chambers simultaneously — isolating full policy mandate periods.</div>
+      </div>
+      <div class="how-item">
+        <div class="how-icon" style="background:rgba(245,158,11,0.08)">📑</div>
+        <div class="how-title">3-Tier System</div>
+        <div class="how-desc">Tier 1 (Core) carries the most scoring weight. Tier 2 (Supporting) adds nuance. Tier 3 (Context) is reference only — it tracks external forces no administration controls.</div>
+      </div>
+
+      <div class="how-item">
+        <div class="how-icon" style="background:rgba(96,165,250,0.12)">&#963;</div>
+        <div class="how-title">Reading the Z-Score</div>
+        <div class="how-desc">
+          The Z-score appears on hover next to every percentile. It measures <strong>how far above or below the historical average</strong> a result was, in standard deviations:
+          <div style="margin-top:0.5rem;display:grid;grid-template-columns:auto 1fr;gap:0.15rem 0.5rem;font-size:0.72rem;line-height:1.6">
+            <span style="color:#10b981;font-family:var(--font-mono);white-space:nowrap">+2.0 or higher</span><span style="color:var(--text-muted)">Exceptional &mdash; among the best on record</span>
+            <span style="color:#10b981;font-family:var(--font-mono)">+0.3 to +2.0</span><span style="color:var(--text-muted)">Above average performance</span>
+            <span style="color:var(--text-dim);font-family:var(--font-mono)">-0.3 to +0.3</span><span style="color:var(--text-muted)">Near average &mdash; essentially typical</span>
+            <span style="color:#f87171;font-family:var(--font-mono)">-0.3 to -2.0</span><span style="color:var(--text-muted)">Below average performance</span>
+            <span style="color:#f87171;font-family:var(--font-mono)">-2.0 or lower</span><span style="color:var(--text-muted)">Among the worst on record</span>
+          </div>
+          <div style="margin-top:0.5rem;color:var(--text-dim);font-size:0.7rem;font-style:italic">
+            A high Z-score doesn&rsquo;t always mean good policy &mdash; use the event markers to read it in context.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV CARDS -->
+  <div class="section-label">Explore Each Layer</div>
+  <div class="nav-cards">
+    <div class="nav-card" onclick="switchTab('tier1')">
+      <div class="nav-card-num">TAB 2</div>
+      <div class="nav-card-title">Tier 1 — Core Metrics</div>
+      <div class="nav-card-desc">GDP growth, unemployment, inflation, and federal deficit — the four metrics that define an administration's economic record.</div>
+      <span class="nav-card-arrow">→</span>
+    </div>
+    <div class="nav-card" onclick="switchTab('tier2')">
+      <div class="nav-card-num">TAB 3</div>
+      <div class="nav-card-title">Tier 2 — Supporting</div>
+      <div class="nav-card-desc">Wages, jobs, poverty, inequality, and household income — who actually benefits from growth?</div>
+      <span class="nav-card-arrow">→</span>
+    </div>
+    <div class="nav-card" onclick="switchTab('tier3')">
+      <div class="nav-card-num">TAB 4</div>
+      <div class="nav-card-title">Tier 3 — Context</div>
+      <div class="nav-card-desc">Fed rates, oil prices, markets, housing — the forces shaping the economy that no president fully controls.</div>
+      <span class="nav-card-arrow">→</span>
+    </div>
+    <div class="nav-card" onclick="switchTab('scorecard')">
+      <div class="nav-card-num">TAB 5</div>
+      <div class="nav-card-title">Scorecard</div>
+      <div class="nav-card-desc">The full D vs R breakdown — every metric, every tier, every president ranked. The final verdict.</div>
+      <span class="nav-card-arrow">→</span>
+    </div>
+  </div>
+
+  <div style="padding:1rem 0 0.5rem;font-size:0.7rem;color:var(--text-dim);line-height:1.6;border-top:1px solid var(--border);">
+    <strong style="color:var(--text-muted)">Data Sources:</strong> BLS (productivity, wages 1979–2024, unemployment, CPI) · BEA (real GDP) · FRED (monetary, rates) · Census CPS (poverty, Gini, median family income 1950–1978) · OMB (deficit, debt). Real median wages: Census 1950–1978 spliced with BLS 1979–2024; wages scored from 1979 only. Scoring methodology on GitHub.
+  </div>
+</div>
+
+<!-- ======== TIER 1 TAB ======== -->
+<div id="tab-tier1" class="tab-panel">
+  <div class="chart-header">
+    <div>
+      <div class="section-label">Tier 1 · Core Metrics (Scored — Highest Weight)</div>
+      <div class="chart-title">Core Economic Performance</div>
+      <div class="chart-subtitle">Five core metrics with the greatest direct policy sensitivity and public impact: GDP growth, unemployment, inflation, deficit, and labor productivity. Toggle between metrics; party bands and event markers persist.</div>
+    </div>
+  </div>
+
+  <div class="multi-hint">Hold <kbd style="background:var(--surface2);padding:0.1rem 0.3rem;border-radius:3px;font-size:0.9em">Shift</kbd> and click to compare multiple metrics of the same unit &mdash; incompatible metrics will be disabled.</div>
+  <div class="metric-toggles" id="tier1-metric-btns">
+    <button class="metric-btn active" onclick="setMetric('tier1','gdp_growth',this,event)">Real GDP Growth</button>
+    <button class="metric-btn" onclick="setMetric('tier1','unemployment',this,event)">Unemployment Rate</button>
+    <button class="metric-btn" onclick="setMetric('tier1','inflation',this,event)">CPI Inflation</button>
+    <button class="metric-btn" onclick="setMetric('tier1','deficit_gdp',this,event)">Deficit % GDP</button>
+    <button class="metric-btn" onclick="setMetric('tier1','labor_prod',this,event)">Labor Productivity</button>
+  </div>
+
+  <div class="chart-controls-row">
+    <div class="ctrl-group">
+      <span class="ctrl-group-label">View:</span>
+      <button class="view-btn active" id="t1-view-pres" onclick="setView('tier1','pres',this)">President</button>
+      <button class="view-btn" id="t1-view-cong" onclick="setView('tier1','cong',this)">Congress</button>
+      <button class="view-btn" id="t1-view-both" onclick="setView('tier1','both',this)">Both</button>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-group-label">Party:</span>
+      <button class="party-btn active-all" id="t1-party-all"  onclick="setParty('tier1','all',this)">All</button>
+      <button class="party-btn" id="t1-party-dem"  onclick="setParty('tier1','dem',this)">Democrat</button>
+      <button class="party-btn" id="t1-party-rep"  onclick="setParty('tier1','rep',this)">Republican</button>
+      <button class="party-btn" id="t1-party-split" onclick="setParty('tier1','split',this)">Split Gov</button>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;margin-bottom:0.6rem"><span style="font-size:0.75rem;color:var(--text-muted)">Showing:</span><div class="era-indicator" style="margin-left:0.5rem"><span class="era-indicator-dot"></span><span id="t1-era-text">All Years 1950–2024</span></div></div>
+  <div class="annotation-bar">
+    <span class="annotation-label">Overlays:</span>
+    <button class="annot-btn shock" id="t1-shock-btn" onclick="toggleAnnot('tier1','shock',this)"><span class="annot-dot" style="background:var(--shock)"></span> Economic Shocks</button>
+    <button class="annot-btn legis" id="t1-legis-btn" onclick="toggleAnnot('tier1','legis',this)"><span class="annot-dot" style="background:var(--legis)"></span> Legislation</button>
+    <button class="annot-btn fedpol" id="t1-fedpol-btn" onclick="toggleAnnot('tier1','fedpol',this)"><span class="annot-dot" style="background:var(--fed)"></span> Fed Policy</button>
+    <button class="ctrl-flag active" id="t1-unified-btn" onclick="toggleUnified('tier1',this)" style="margin-left:auto">
+      <span class="ctrl-flag-dot" style="background:var(--gold)"></span> Unified Gov
+    </button>
+  </div>
+
+  <div class="zoom-controls">
+    <span class="zoom-label" id="tier1-zoom-label">100%</span>
+    <button class="zoom-btn" onclick="chartZoom('tier1',-1)" title="Zoom out">&#8722;</button>
+    <button class="zoom-btn" onclick="chartZoom('tier1',1)" title="Zoom in">&#43;</button>
+    <button class="zoom-reset" onclick="chartZoomReset('tier1')">Reset</button>
+  </div>
+  <div class="chart-wrap chart-zoom-wrap">
+    <div class="chart-zoom-inner" id="tier1-zoom-inner">
+      <div id="chart-tier1" class="plotly-chart" style="width:100%;height:400px;overflow:hidden"></div>
+    </div>
+  </div>
+  <button class="event-picker-toggle" id="t1-picker-toggle" onclick="togglePicker('t1')"><span class="chevron">&#9660;</span>&nbsp;Customize individual events &amp; legislation</button>
+  <div class="event-picker-panel" id="t1-picker-panel"></div>
+
+
+  <div class="section-label" style="margin-top:1.5rem">Tier 1 Metric Scores — D vs R</div>
+  <div class="tier-mini-score" id="tier1-mini-scores"></div>
+</div>
+
+<!-- ======== TIER 2 TAB ======== -->
+<div id="tab-tier2" class="tab-panel">
+  <div class="chart-header">
+    <div>
+      <div class="section-label">Tier 2 · Supporting Metrics (Scored)</div>
+      <div class="chart-title">Labor, Wages & Inequality</div>
+      <div class="chart-subtitle">These metrics reveal who benefits from economic growth — and who gets left behind. Scored but weighted below Tier 1.</div>
+    </div>
+  </div>
+
+  <div class="multi-hint">Hold <kbd style="background:var(--surface2);padding:0.1rem 0.3rem;border-radius:3px;font-size:0.9em">Shift</kbd> and click to compare multiple metrics of the same unit &mdash; incompatible metrics will be disabled.</div>
+  <div class="metric-toggles" id="tier2-metric-btns">
+    <button class="metric-btn active" onclick="setMetric('tier2','lfpr',this,event)">Labor Force Participation</button>
+    <button class="metric-btn" onclick="setMetric('tier2','real_dpi',this,event)">Real Disp. Income</button>
+    <button class="metric-btn" onclick="setMetric('tier2','poverty',this,event)">Poverty Rate</button>
+    <button class="metric-btn" onclick="setMetric('tier2','gini',this,event)">Gini Coefficient</button>
+    <button class="metric-btn" onclick="setMetric('tier2','real_wages',this,event)">Real Median Wages</button>
+    <button class="metric-btn" onclick="setMetric('tier2','prod_wage_gap',this,event)">Productivity-Wage Gap</button>
+  </div>
+
+  <div class="chart-controls-row">
+    <div class="ctrl-group">
+      <span class="ctrl-group-label">View:</span>
+      <button class="view-btn active" id="t2-view-pres" onclick="setView('tier2','pres',this)">President</button>
+      <button class="view-btn" id="t2-view-cong" onclick="setView('tier2','cong',this)">Congress</button>
+      <button class="view-btn" id="t2-view-both" onclick="setView('tier2','both',this)">Both</button>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-group-label">Party:</span>
+      <button class="party-btn active-all" id="t2-party-all"  onclick="setParty('tier2','all',this)">All</button>
+      <button class="party-btn" id="t2-party-dem"  onclick="setParty('tier2','dem',this)">Democrat</button>
+      <button class="party-btn" id="t2-party-rep"  onclick="setParty('tier2','rep',this)">Republican</button>
+      <button class="party-btn" id="t2-party-split" onclick="setParty('tier2','split',this)">Split Gov</button>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;margin-bottom:0.6rem"><span style="font-size:0.75rem;color:var(--text-muted)">Showing:</span><div class="era-indicator" style="margin-left:0.5rem"><span class="era-indicator-dot"></span><span id="t2-era-text">All Years 1950–2024</span></div></div>
+  <div class="annotation-bar">
+    <span class="annotation-label">Overlays:</span>
+    <button class="annot-btn shock" id="t2-shock-btn" onclick="toggleAnnot('tier2','shock',this)"><span class="annot-dot" style="background:var(--shock)"></span> Economic Shocks</button>
+    <button class="annot-btn legis" id="t2-legis-btn" onclick="toggleAnnot('tier2','legis',this)"><span class="annot-dot" style="background:var(--legis)"></span> Legislation</button>
+    <button class="annot-btn fedpol" id="t2-fedpol-btn" onclick="toggleAnnot('tier2','fedpol',this)"><span class="annot-dot" style="background:var(--fed)"></span> Fed Policy</button>
+    <button class="ctrl-flag active" id="t2-unified-btn" onclick="toggleUnified('tier2',this)" style="margin-left:auto">
+      <span class="ctrl-flag-dot" style="background:var(--gold)"></span> Unified Gov
+    </button>
+  </div>
+
+  <div class="zoom-controls">
+    <span class="zoom-label" id="tier2-zoom-label">100%</span>
+    <button class="zoom-btn" onclick="chartZoom('tier2',-1)" title="Zoom out">&#8722;</button>
+    <button class="zoom-btn" onclick="chartZoom('tier2',1)" title="Zoom in">&#43;</button>
+    <button class="zoom-reset" onclick="chartZoomReset('tier2')">Reset</button>
+  </div>
+  <div class="chart-wrap chart-zoom-wrap">
+    <div class="chart-zoom-inner" id="tier2-zoom-inner">
+      <div id="chart-tier2" class="plotly-chart" style="width:100%;height:400px;overflow:hidden"></div>
+    </div>
+  </div>
+  <button class="event-picker-toggle" id="t2-picker-toggle" onclick="togglePicker('t2')"><span class="chevron">&#9660;</span>&nbsp;Customize individual events &amp; legislation</button>
+  <div class="event-picker-panel" id="t2-picker-panel"></div>
+
+
+  <div id="t2-gap-note" style="display:none;padding:0.75rem 1rem;background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);border-radius:8px;margin-top:0.5rem;font-size:0.78rem;color:#8892a4;line-height:1.5"><strong style="color:#60a5fa">Productivity-Wage Gap</strong> is a derived, unscored metric — it does not contribute to party percentile rankings. A <strong style="color:#f87171">positive gap</strong> means productivity is growing faster than wages (workers capturing less of what they produce). A <strong style="color:#10b981">negative gap</strong> means wages are outpacing productivity. <span style="color:#f59e0b">Amber dashed line at 1979</span> marks the data splice (Census family income → BLS weekly earnings).</div>
+  <div class="section-label" style="margin-top:1.5rem">Tier 2 Metric Scores — D vs R</div>
+  <div class="tier-mini-score" id="tier2-mini-scores"></div>
+</div>
+
+<!-- ======== TIER 3 TAB ======== -->
+<div id="tab-tier3" class="tab-panel">
+  <div class="chart-header">
+    <div>
+      <div class="section-label">Tier 3 · Contextual Metrics (Non-Scored — Reference Only)</div>
+      <div class="chart-title">External Forces & Context</div>
+      <div class="chart-subtitle">Reference context — largely outside any administration’s direct control. Includes Nonfarm Payrolls and Federal Deficit ($B) relocated from Tier 2. Use these to understand <em>why</em> Tier 1–2 metrics moved the way they did.</div>
+    </div>
+  </div>
+
+  <div class="multi-hint">Hold <kbd style="background:var(--surface2);padding:0.1rem 0.3rem;border-radius:3px;font-size:0.9em">Shift</kbd> and click to compare multiple metrics of the same unit &mdash; incompatible metrics will be disabled.</div>
+  <div class="metric-toggles" id="tier3-metric-btns">
+    <button class="metric-btn active" onclick="setMetric('tier3','fed_rate',this,event)">Fed Funds Rate</button>
+    <button class="metric-btn" onclick="setMetric('tier3','sp500',this,event)">S&P 500 Return</button>
+    <button class="metric-btn" onclick="setMetric('tier3','oil',this,event)">Oil Price (WTI)</button>
+    <button class="metric-btn" onclick="setMetric('tier3','housing',this,event)">Housing Starts</button>
+    <button class="metric-btn" onclick="setMetric('tier3','sentiment',this,event)">Consumer Sentiment</button>
+    <button class="metric-btn" onclick="setMetric('tier3','treasury10y',this,event)">10-Yr Treasury</button>
+    <button class="metric-btn" onclick="setMetric('tier3','us_debt',this,event)">US Total Debt ($B)</button>
+    <button class="metric-btn" onclick="setMetric('tier3','payrolls',this,event)">Nonfarm Payrolls</button>
+    <button class="metric-btn" onclick="setMetric('tier3','deficit_nominal',this,event)">Federal Deficit ($B)</button>
+  </div>
+
+  <div class="chart-controls-row">
+    <div class="ctrl-group">
+      <span class="ctrl-group-label">View:</span>
+      <button class="view-btn active" id="t3-view-pres" onclick="setView('tier3','pres',this)">President</button>
+      <button class="view-btn" id="t3-view-cong" onclick="setView('tier3','cong',this)">Congress</button>
+      <button class="view-btn" id="t3-view-both" onclick="setView('tier3','both',this)">Both</button>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-group-label">Party:</span>
+      <button class="party-btn active-all" id="t3-party-all"  onclick="setParty('tier3','all',this)">All</button>
+      <button class="party-btn" id="t3-party-dem"  onclick="setParty('tier3','dem',this)">Democrat</button>
+      <button class="party-btn" id="t3-party-rep"  onclick="setParty('tier3','rep',this)">Republican</button>
+      <button class="party-btn" id="t3-party-split" onclick="setParty('tier3','split',this)">Split Gov</button>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;margin-bottom:0.6rem"><span style="font-size:0.75rem;color:var(--text-muted)">Showing:</span><div class="era-indicator" style="margin-left:0.5rem"><span class="era-indicator-dot"></span><span id="t3-era-text">All Years 1950–2024</span></div></div>
+  <div class="annotation-bar">
+    <span class="annotation-label">Overlays:</span>
+    <button class="annot-btn shock" id="t3-shock-btn" onclick="toggleAnnot('tier3','shock',this)"><span class="annot-dot" style="background:var(--shock)"></span> Economic Shocks</button>
+    <button class="annot-btn legis" id="t3-legis-btn" onclick="toggleAnnot('tier3','legis',this)"><span class="annot-dot" style="background:var(--legis)"></span> Legislation</button>
+    <button class="annot-btn fedpol" id="t3-fedpol-btn" onclick="toggleAnnot('tier3','fedpol',this)"><span class="annot-dot" style="background:var(--fed)"></span> Fed Policy</button>
+    <button class="ctrl-flag active" id="t3-unified-btn" onclick="toggleUnified('tier3',this)" style="margin-left:auto">
+      <span class="ctrl-flag-dot" style="background:var(--gold)"></span> Unified Gov
+    </button>
+  </div>
+
+  <div class="zoom-controls">
+    <span class="zoom-label" id="tier3-zoom-label">100%</span>
+    <button class="zoom-btn" onclick="chartZoom('tier3',-1)" title="Zoom out">&#8722;</button>
+    <button class="zoom-btn" onclick="chartZoom('tier3',1)" title="Zoom in">&#43;</button>
+    <button class="zoom-reset" onclick="chartZoomReset('tier3')">Reset</button>
+  </div>
+  <div class="chart-wrap chart-zoom-wrap">
+    <div class="chart-zoom-inner" id="tier3-zoom-inner">
+      <div id="chart-tier3" class="plotly-chart" style="width:100%;height:400px;overflow:hidden"></div>
+    </div>
+  </div>
+  <button class="event-picker-toggle" id="t3-picker-toggle" onclick="togglePicker('t3')"><span class="chevron">&#9660;</span>&nbsp;Customize individual events &amp; legislation</button>
+  <div class="event-picker-panel" id="t3-picker-panel"></div>
+
+
+  <div style="padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-top:1rem;font-size:0.78rem;color:var(--text-muted);line-height:1.6;">
+    <strong style="color:var(--text-dim)">Note on Tier 3 scoring:</strong> These metrics are intentionally excluded from party scoring. The Federal Funds Rate reflects independent Fed decisions; oil prices are globally determined; markets respond to global capital flows. Total Public Debt is the accumulated stock of all prior deficits — inherited by every administration — so it is shown here as context rather than a scored outcome. They appear here to provide essential interpretive context.
+  </div>
+</div>
+
+<!-- ======== SCORECARD TAB ======== -->
+<div id="tab-scorecard" class="tab-panel">
+  <div class="scorecard-header">
+    <div class="section-label">The Verdict</div>
+    <div class="scorecard-title">Party Economic Scorecard</div>
+    <div class="scorecard-sub">Scores shown in <span id="sc-mode-label" style="color:var(--gold)">Absolute Performance</span> mode — Era: <span id="sc-era-range">1950–2024</span>, weighted by tier, with presidential lag adjustment. Scores represent performance relative to the full 1950–2024 baseline.</div>
+  </div>
+
+  <!-- SCORE MODE TOGGLE -->
+  <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap">
+    <div class="score-mode-toggle">
+      <button class="score-mode-btn active" id="mode-abs" onclick="setScoreMode('abs',this)">Absolute Performance</button>
+      <button class="score-mode-btn" id="mode-traj" onclick="setScoreMode('traj',this)">Trajectory (Inherited Adjusted)</button>
+      <button class="score-mode-btn" id="mode-both" onclick="setScoreMode('both',this)">Both</button>
+    </div>
+    <div style="font-size:0.72rem;color:var(--text-dim);max-width:380px;line-height:1.5" id="score-mode-desc">
+      <strong style="color:var(--text-muted)">Absolute:</strong> Percentile rank vs all administrations 1950&#8211;2024.
+    </div>
+  </div>
+
+  <div class="score-vs-banner">
+    <div class="score-party-block dem">
+      <div class="score-party-name">Democratic</div>
+      <div class="score-big-num" id="sc-dem-big">—</div>
+      <div style="font-size:0.75rem;color:var(--text-muted)">Overall Percentile</div>
+      <div class="score-winner-tag" id="sc-dem-tag" style="background:rgba(37,99,235,0.1);color:var(--dem)">—</div>
+    </div>
+    <div class="score-vs">vs</div>
+    <div class="score-party-block rep">
+      <div class="score-party-name">Republican</div>
+      <div class="score-big-num" id="sc-rep-big">—</div>
+      <div style="font-size:0.75rem;color:var(--text-muted)">Overall Percentile</div>
+      <div class="score-winner-tag" id="sc-rep-tag" style="background:rgba(220,38,38,0.1);color:var(--rep)">—</div>
+    </div>
+  </div>
+
+  <div class="lag-note">
+    <strong style="color:var(--text-muted)">Methodology:</strong> Scores are percentile ranks (0th–100th) calculated against all administrations 1950–2024. Presidential outcomes are lagged 6–12 months from inauguration. Congressional outcomes are lagged 12–18 months from the start of each Congress. For metrics where <em>lower is better</em> (unemployment, inflation, deficit, poverty, Gini), the percentile is inverted so that 100 always = best performance. Tier 1 carries 50% of composite weight; Tier 2 carries 50%. Hover any score cell to see the Z-score (standard deviations from historical mean).
+  </div>
+
+  <table class="metric-table" id="scorecard-table">
+    <thead>
+      <tr>
+        <th style="width:30%">Metric</th>
+        <th style="width:16%">Direction</th>
+        <th style="width:18%">
+          <span style="color:var(--dem)">Democrat</span> Score
+        </th>
+        <th style="width:18%">
+          <span style="color:var(--rep)">Republican</span> Score
+        </th>
+        <th style="width:10%;text-align:center">Winner</th>
+        <th style="width:8%">Weight</th>
+      </tr>
+    </thead>
+    <tbody id="scorecard-body">
+      <!-- filled by JS -->
+    </tbody>
+  </table>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1.5rem">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.5rem">
+      <div class="section-label">Split vs. Unified Government</div>
+      <div id="split-unified-breakdown" style="font-size:0.82rem;color:var(--text-muted);line-height:1.8"></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.5rem">
+      <div class="section-label">Key Caveats</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.7">
+        Economic outcomes are multi-causal. No statistical model can fully isolate presidential or congressional impact from global forces, inherited conditions, or Federal Reserve decisions. These scores are a structured framework for comparison — not a definitive causal claim. Use the Context tab to understand the external environment each administration faced.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- PRODUCTIVITY-WAGE GAP PANEL -->
+  <div style="margin-top:2rem">
+    <div class="section-label">The Productivity-Wage Gap</div>
+    <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem;line-height:1.6;max-width:680px">
+      Labor productivity measures how much value workers generate per hour. Real median wages measure how much of that value workers actually take home.
+      The gap between them is the most direct empirical test of whether economic gains are broadly shared or concentrated at the top.
+    </div>
+    <div id="gap-era-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem"></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+      <table class="metric-table" id="gap-president-table">
+        <thead><tr>
+          <th>President</th><th>Party</th><th>Avg Productivity Growth</th>
+          <th>Avg Wage Growth</th><th>Gap</th><th>Interpretation</th>
+        </tr></thead>
+        <tbody id="gap-table-body"></tbody>
+      </table>
+    </div>
+    <div style="font-size:0.7rem;color:var(--text-dim);margin-top:0.75rem;font-style:italic">
+      Wages scored from 1979 (BLS series start). Pre-1979 wage data from Census median family income — shown in chart but excluded from percentile scoring to avoid methodology mixing.
+    </div>
+  </div>
+
+  <!-- PER PRESIDENT BREAKDOWN -->
+  <div style="margin-top:2rem">
+    <div class="section-label">Individual President Rankings</div>
+    <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:1rem;line-height:1.5">
+      Each president scored on their lagged economic record (6–12 month offset). Percentile = performance vs. all other administrations. Hover score for Z-score.
+    </div>
+    <div id="president-rankings-table"></div>
+  </div>
+
+  <!-- PER CONGRESS BREAKDOWN -->
+  <div style="margin-top:2rem;margin-bottom:2rem">
+    <div class="section-label">Congressional Era Rankings</div>
+    <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:1rem;line-height:1.5">
+      Congress scored by their majority-controlled session (12–18 month lag). Senate and House majority noted separately.
+    </div>
+    <div id="congress-rankings-table"></div>
+  </div>
+
+</div><!-- end .main -->
+<script>
+
+// ================================================================
+// PURE VANILLA JS DASHBOARD \u2014 Zero external dependencies
+// SVG charts built entirely in JS. Works in Claude, GitHub Pages,
+// offline \u2014 anywhere.
+// ================================================================
+
+const YEARS = Array.from({length:75},(_,i)=>1950+i);
+
+const ERAS={
+  all:        {label:'All Years',         start:1950,end:2024},
+  postwar:    {label:'Postwar Boom',      start:1950,end:1969},
+  stagflation:{label:'Stagflation Era',   start:1970,end:1979},
+  reagan:     {label:'Reagan Revolution', start:1980,end:2000},
+  modern:     {label:'Modern Era',        start:2001,end:2024},
+  prereagan:  {label:'Pre-Reagan',        start:1950,end:1979},
+  postreagan: {label:'Post-Reagan',       start:1980,end:2024}
+};
+let currentEra='all';
+
+const PRES_PARTY = {
+  1950:1,1951:1,1952:1,
+  1953:0,1954:0,1955:0,1956:0,1957:0,1958:0,1959:0,1960:0,
+  1961:1,1962:1,1963:1,
+  1964:1,1965:1,1966:1,1967:1,1968:1,
+  1969:0,1970:0,1971:0,1972:0,1973:0,1974:0,
+  1975:0,1976:0,
+  1977:1,1978:1,1979:1,1980:1,
+  1981:0,1982:0,1983:0,1984:0,1985:0,1986:0,1987:0,1988:0,
+  1989:0,1990:0,1991:0,1992:0,
+  1993:1,1994:1,1995:1,1996:1,1997:1,1998:1,1999:1,2000:1,
+  2001:0,2002:0,2003:0,2004:0,2005:0,2006:0,2007:0,2008:0,
+  2009:1,2010:1,2011:1,2012:1,2013:1,2014:1,2015:1,2016:1,
+  2017:0,2018:0,2019:0,2020:0,
+  2021:1,2022:1,2023:1,2024:1
+};
+const SENATE_PARTY = {
+  1950:1,1951:1,1952:1,1953:0,1954:0,1955:1,1956:1,1957:1,1958:1,1959:1,1960:1,
+  1961:1,1962:1,1963:1,1964:1,1965:1,1966:1,1967:1,1968:1,1969:1,1970:1,1971:1,1972:1,
+  1973:1,1974:1,1975:1,1976:1,1977:1,1978:1,1979:1,1980:1,
+  1981:0,1982:0,1983:0,1984:0,1985:0,1986:0,
+  1987:1,1988:1,1989:1,1990:1,1991:1,1992:1,1993:1,1994:1,
+  1995:0,1996:0,1997:0,1998:0,1999:0,2000:0,
+  2001:2,2002:0,2003:0,2004:0,2005:0,2006:0,
+  2007:1,2008:1,2009:1,2010:1,2011:1,2012:1,2013:1,2014:1,
+  2015:0,2016:0,2017:0,2018:0,2019:0,2020:0,
+  2021:2,2022:1,2023:1,2024:1
+};
+const HOUSE_PARTY = {
+  1950:1,1951:1,1952:1,1953:0,1954:0,1955:1,1956:1,1957:1,1958:1,1959:1,1960:1,
+  1961:1,1962:1,1963:1,1964:1,1965:1,1966:1,1967:1,1968:1,1969:1,1970:1,1971:1,1972:1,
+  1973:1,1974:1,1975:1,1976:1,1977:1,1978:1,1979:1,1980:1,
+  1981:0,1982:1,1983:1,1984:1,1985:1,1986:1,1987:1,1988:1,1989:1,1990:1,1991:1,1992:1,
+  1993:1,1994:1,1995:0,1996:0,1997:0,1998:0,1999:0,2000:0,
+  2001:0,2002:0,2003:0,2004:0,2005:0,2006:0,
+  2007:1,2008:1,2009:1,2010:1,
+  2011:0,2012:0,2013:0,2014:0,2015:0,2016:0,2017:0,2018:0,
+  2019:1,2020:1,2021:1,2022:1,
+  2023:0,2024:0
+};
+const UNIFIED={};
+YEARS.forEach(y=>{const p=PRES_PARTY[y],s=SENATE_PARTY[y],h=HOUSE_PARTY[y];UNIFIED[y]=(p===s&&s===h&&p!==2)?p:-1;});
+
+const PRESIDENTS=[
+  {name:'Truman',    party:1,start:1950,end:1952},
+  {name:'Eisenhower',party:0,start:1953,end:1960},
+  {name:'Kennedy',   party:1,start:1961,end:1963},
+  {name:'Johnson',   party:1,start:1964,end:1968},
+  {name:'Nixon/Ford',party:0,start:1969,end:1976},
+  {name:'Carter',    party:1,start:1977,end:1980},
+  {name:'Reagan',    party:0,start:1981,end:1988},
+  {name:'Bush Sr',   party:0,start:1989,end:1992},
+  {name:'Clinton',   party:1,start:1993,end:2000},
+  {name:'Bush Jr',   party:0,start:2001,end:2008},
+  {name:'Obama',     party:1,start:2009,end:2016},
+  {name:'Trump',     party:0,start:2017,end:2020},
+  {name:'Biden',     party:1,start:2021,end:2024}
+];
+const CONGRESSES=[
+  {name:'81st Congress',        start:1950,end:1952,senate:1,house:1},
+  {name:'83rd Congress',        start:1953,end:1954,senate:0,house:0},
+  {name:'84th\u201386th Congress',   start:1955,end:1960,senate:1,house:1},
+  {name:'87th\u201388th Congress',   start:1961,end:1964,senate:1,house:1},
+  {name:'89th\u201390th Congress',   start:1965,end:1968,senate:1,house:1},
+  {name:'91st\u201393rd Congress',   start:1969,end:1974,senate:1,house:1},
+  {name:'94th\u201395th Congress',   start:1975,end:1978,senate:1,house:1},
+  {name:'96th Congress',        start:1979,end:1980,senate:1,house:1},
+  {name:'97th\u201399th Congress',   start:1981,end:1986,senate:0,house:1},
+  {name:'100th\u2013101st Congress', start:1987,end:1990,senate:1,house:1},
+  {name:'102nd Congress',       start:1991,end:1992,senate:1,house:1},
+  {name:'103rd Congress',       start:1993,end:1994,senate:1,house:1},
+  {name:'104th\u2013106th Congress', start:1995,end:2000,senate:0,house:0},
+  {name:'107th Congress',       start:2001,end:2002,senate:2,house:0},
+  {name:'108th\u2013109th Congress', start:2003,end:2006,senate:0,house:0},
+  {name:'110th\u2013111th Congress', start:2007,end:2010,senate:1,house:1},
+  {name:'112th\u2013113th Congress', start:2011,end:2014,senate:1,house:0},
+  {name:'114th\u2013115th Congress', start:2015,end:2018,senate:0,house:0},
+  {name:'116th\u2013117th Congress', start:2019,end:2022,senate:0,house:1},
+  {name:'118th Congress',       start:2023,end:2024,senate:1,house:0}
+];
+
+const DATA={
+  gdp_growth:{label:'Real GDP Growth',unit:'%',lowerBetter:false,tier:1,
+    values:[8.7,8.1,3.9,-0.6,4.6,7.1,2.1,2.1,-1.1,7.2,2.6,6.1,4.4,5.8,6.5,6.4,2.9,2.7,4.8,3.1,3.2,5.4,5.6,5.8,-0.5,4.6,4.6,3.1,0.5,-0.2,2.5,4.6,7.2,7.3,3.9,3.5,3.5,4.2,3.7,3.5,1.9,-0.1,3.6,4.0,2.5,3.7,4.5,4.8,4.8,4.1,1.0,-0.8,-1.8,2.8,3.8,3.5,2.9,1.9,2.5,2.9,1.7,2.3,1.8,2.5,2.9,2.3,1.8,2.9,2.3,2.2,-3.4,5.9,2.1,2.1,2.5]},
+  unemployment:{label:'Unemployment Rate',unit:'%',lowerBetter:true,tier:1,
+    values:[5.3,3.3,3.0,2.9,5.5,4.4,4.1,4.3,6.8,5.5,5.5,6.7,5.5,5.7,5.2,4.5,3.8,3.8,3.6,3.5,4.9,5.9,5.6,4.9,5.6,8.5,7.7,7.1,6.1,7.1,7.6,9.7,9.6,7.5,7.2,7.0,7.0,6.2,5.5,5.3,5.6,7.3,7.4,6.1,5.6,5.4,4.9,4.7,4.5,4.2,4.7,5.8,5.8,6.0,5.5,5.1,4.6,4.6,5.0,7.3,9.6,9.0,8.1,7.4,6.2,5.3,4.9,4.4,3.9,3.7,8.1,5.4,3.6,3.5,3.4]},
+  inflation:{label:'CPI Inflation',unit:'%',lowerBetter:true,tier:1,
+    values:[1.3,7.9,1.9,0.8,0.7,0.4,3.0,2.9,3.3,0.7,1.7,1.0,1.0,1.3,1.3,1.6,2.9,3.1,4.2,5.5,5.7,4.4,3.2,6.2,11.0,9.1,5.8,6.5,7.6,13.5,10.3,6.2,3.2,4.3,4.3,3.6,1.9,3.6,4.1,4.8,5.4,4.2,3.0,2.6,2.8,2.9,3.3,2.3,1.6,2.2,3.4,2.8,1.6,2.3,2.7,2.7,3.4,3.2,2.8,3.8,1.6,3.1,2.1,1.5,1.6,0.1,1.3,2.1,2.4,1.8,1.2,4.7,8.0,4.1,3.4]},
+  deficit_gdp:{label:'Federal Deficit % GDP',unit:'%',lowerBetter:true,tier:1,
+    values:[-2.2,-1.4,0.0,1.7,0.3,-0.8,-1.0,-0.8,0.6,-2.5,-1.5,-0.5,-1.1,-0.9,-0.3,-0.2,-0.5,-1.1,-2.9,-2.5,-2.1,-2.4,-0.3,1.2,-0.4,-3.4,-2.1,-1.7,-0.6,-1.6,-2.6,-2.6,-3.9,-5.9,-5.0,-3.4,-4.9,-3.4,-3.1,-3.0,-3.9,-4.5,-4.7,-3.9,-2.9,-2.2,-0.4,0.4,0.8,-1.4,-3.1,-2.4,-1.5,-3.4,-4.6,-3.2,-2.2,-1.4,-2.9,-3.1,-8.7,-8.4,-6.7,-4.1,-2.8,-2.4,-3.1,-3.4,-3.8,-4.6,-14.9,-12.4,-5.0,-5.5,-6.3]},
+  labor_prod:{label:'Labor Productivity Growth',unit:'%',lowerBetter:false,tier:1,
+    values:[
+      6.5,2.8,3.7,3.0,2.5,3.6,0.9,3.4,2.8,3.3,  // 1950-1959
+      1.8,3.4,4.2,4.0,5.0,3.5,2.8,2.4,3.3,0.4,  // 1960-1969
+      1.4,4.0,3.9,2.8,0.7,1.8,3.2,2.2,0.9,0.8,  // 1970-1979
+     -0.6,1.5,3.1,2.4,2.5,2.5,1.5,2.7,0.7,1.2,  // 1980-1989
+      1.5,1.7,3.6,0.2,0.5,0.7,2.7,1.8,2.9,3.2,  // 1990-1999
+      3.4,2.4,4.2,3.1,3.7,2.2,1.5,1.9,0.5,-0.4, // 2000-2009
+      3.5,0.4,1.0,0.5,0.7,0.9,0.1,1.0,1.7,1.6,  // 2010-2019
+      2.8,2.0,3.5,4.9,2.7]},                 // 2020-2024
+  lfpr:{label:'Labor Force Participation',unit:'%',lowerBetter:false,tier:2,
+    values:[59.2,59.2,59.0,58.8,59.0,59.3,60.0,59.6,59.5,59.5,59.4,59.4,58.8,58.7,58.7,58.8,59.2,59.6,59.6,60.1,60.4,60.2,60.4,60.8,61.3,61.2,62.3,62.3,63.2,63.7,63.8,63.9,64.0,64.0,64.4,64.8,65.3,65.6,65.9,66.5,66.5,66.8,66.4,66.2,66.6,66.6,66.8,67.1,67.1,67.1,67.2,66.9,66.6,66.2,66.0,66.2,66.3,66.1,66.0,65.4,64.7,64.1,63.7,63.2,62.9,62.7,62.8,62.9,63.1,63.3,61.7,61.7,62.2,62.2,62.6]},
+  payrolls:{label:'Nonfarm Payrolls Change',unit:'M jobs',lowerBetter:false,tier:3,
+    values:[0.9,1.7,1.1,-0.6,1.4,2.2,1.0,0.9,-0.9,1.6,1.4,0.6,1.5,1.9,2.7,3.4,3.1,2.0,2.8,2.8,2.8,1.5,1.7,2.0,-0.5,-1.3,1.5,3.2,3.3,0.2,-0.1,-1.7,1.1,3.5,3.6,2.3,2.0,3.1,3.2,3.2,1.3,-0.8,1.0,3.1,3.2,2.8,2.2,2.4,2.8,2.5,1.1,-0.3,-0.3,0.1,2.3,2.8,2.2,2.2,2.9,2.1,-5.1,2.7,4.5,3.0,3.2,2.8,2.6,2.1,2.7,2.5,-9.3,6.7,4.5,3.0,2.7]},
+  real_dpi:{label:'Real Disposable Income Growth',unit:'%',lowerBetter:false,tier:2,
+    values:[3.9,1.0,-1.2,0.8,3.5,5.1,4.0,3.4,-1.4,3.0,2.0,2.9,3.2,5.1,7.1,6.4,3.9,3.0,4.5,5.9,5.1,5.2,5.6,7.7,5.2,-0.3,4.6,4.4,5.2,4.8,1.0,-1.2,2.3,7.5,5.7,3.2,2.7,3.0,3.2,4.5,4.7,2.5,2.5,2.9,3.4,3.7,3.8,3.3,3.4,2.4,3.1,1.7,0.5,1.6,4.0,3.5,2.7,1.8,2.8,2.3,1.2,2.6,2.8,0.8,2.9,3.7,3.2,1.6,3.3,3.2,6.8,2.0,1.7,-4.2,1.8]},
+  poverty:{label:'Poverty Rate',unit:'%',lowerBetter:true,tier:2,
+    values:[null,null,null,null,null,null,null,null,null,null,22.2,21.9,21.0,19.5,19.0,17.3,14.7,14.2,12.8,12.1,12.6,12.5,11.9,11.1,11.2,12.3,11.8,11.6,11.4,11.6,13.0,14.0,15.0,15.2,14.4,14.0,13.6,13.0,12.8,12.8,13.5,14.2,14.8,15.1,14.5,13.8,13.7,13.3,12.7,11.8,11.3,11.7,12.1,12.5,12.7,13.2,14.3,15.1,15.0,13.2,14.6,15.9,15.0,14.5,14.8,14.7,13.5,12.3,11.8,10.5,11.4,9.2,7.8,11.5,11.1]},
+  gini:{label:'Gini Coefficient',unit:'',lowerBetter:true,tier:2,
+    values:[null,null,null,null,null,null,null,null,null,null,null,null,null,0.376,0.375,0.371,0.365,0.366,0.366,0.369,0.376,0.381,0.376,0.380,0.394,0.397,0.398,0.402,0.402,0.403,0.406,0.414,0.412,0.415,0.416,0.419,0.425,0.426,0.427,0.428,0.434,0.436,0.434,0.455,0.456,0.452,0.451,0.454,0.459,0.462,0.467,0.468,0.477,0.481,0.476,0.479,0.469,0.469,0.466,0.469,0.479,0.477,0.475,0.476,0.480,0.479,0.481,0.489,0.486,0.484,0.490,0.488,0.470,0.475,0.479]},
+  real_wages:{label:'Real Median Wages',unit:'%',lowerBetter:false,tier:2,
+    spliceYear:1979,
+    spliceNote:'Census median family income 1950-1978 / BLS median weekly earnings 1979-2024',
+    values:[
+      // 1950-1978: Census real median family income YoY % change
+       5.1, 4.8, 3.9, 5.4, 2.4, 4.8, 4.2, 3.1, 3.0, 4.8,  // 1950-1959
+       3.9, 4.6, 5.5, 5.4, 6.0, 6.4, 5.0, 3.6, 5.9, 5.1,  // 1960-1969
+       4.7, 4.2, 1.8, 1.3,-4.3, 1.0, 3.2, 2.0,-1.1,        // 1970-1978
+      // 1979-2024: BLS real median usual weekly earnings YoY % change
+      -1.8,-1.5,-2.3, 0.0,-0.8, 0.5, 0.4,-0.3, 0.1,-0.4,  // 1979-1988
+       0.1, 0.3, 0.9, 0.4,-0.2, 1.6, 1.5, 2.6, 2.7, 1.8,  // 1989-1998
+       1.9, 1.2, 0.2, 0.0, 0.3,-0.8, 1.0,-0.5, 0.8, 0.7,  // 1999-2008
+      -2.4, 0.8, 0.3, 0.7, 0.4, 0.9, 2.0, 0.9, 0.5, 1.2,  // 2009-2018
+       0.8, 7.1,-1.8, 0.8,-1.5, 0.6]},                      // 2019-2024
+  prod_wage_gap:{label:'Productivity-Wage Gap',unit:'% pts',lowerBetter:true,tier:2,derived:true,
+    note:'Labor productivity growth minus real median wage growth. Positive = workers capturing less than they produce.',
+    values:[
+       1.4,-2.0,-0.2,-2.4, 0.1,-1.2,-3.3, 0.3,-0.2,-1.5,  // 1950-1959
+      -2.1,-1.2,-1.3,-1.4,-1.0,-2.9,-2.2,-1.2,-2.6,-4.7,  // 1960-1969
+      -3.3,-0.2, 2.1, 1.5, 5.0, 0.8, 0.0, 0.2, 2.0, 2.6,  // 1970-1979
+       0.9, 3.8, 3.1, 3.2, 2.0, 2.1, 1.8, 2.6, 1.1, 1.1,  // 1980-1989
+       1.2, 0.8, 3.2, 0.4,-0.8,-0.8, 0.1,-0.9, 1.1, 1.3,  // 1990-1999
+       2.2, 2.2, 4.2, 2.8, 4.5, 1.2, 2.0, 1.1,-0.2, 0.3,  // 2000-2009
+       2.7, 0.1, 0.3, 0.1,-0.2,-1.1,-0.8, 0.5, 0.5, 0.8,  // 2010-2019
+      -4.3, 4.0, 2.7, 6.4, 2.1]},                     // 2020-2024
+  deficit_nominal:{label:'Federal Deficit (Nominal $B)',unit:'$B',lowerBetter:true,tier:3,
+    values:[-3.1,-6.1,0.0,1.7,1.2,-3.0,-2.8,-3.2,0.3,-12.8,
+            -3.3,-3.9,-7.1,-5.9,-1.4,-1.6,-3.8,-8.7,-25.2,-17.1,
+            -16.0,-23.0,-3.5,8.4,-6.1,-45.2,-14.7,-20.1,-7.8,-27.7,
+            -73.8,-79.0,-128.0,-208.0,-185.0,-212.0,-221.0,-150.0,-155.0,-153.0,
+            -221.0,-269.0,-290.0,-255.0,-203.0,-164.0,-22.0,69.2,125.6,-236.2,
+            -317.4,-158.5,-157.8,-374.8,-412.7,-318.3,-248.2,-161.0,-458.6,-587.0,
+            -1413.0,-1294.0,-1089.0,-679.0,-485.0,-438.0,-585.0,-665.0,-779.0,-984.0,
+            -3132.0,-2775.0,-1375.0,-1695.0,-1695.0]},
+  fed_rate:{label:'Federal Funds Rate',unit:'%',lowerBetter:false,tier:3,
+    values:[null,null,null,1.5,1.0,1.8,2.7,3.1,2.2,3.6,3.5,3.0,3.0,3.0,3.5,4.1,5.1,5.7,6.3,8.2,9.0,7.2,5.0,8.7,10.5,5.8,5.0,6.5,7.9,11.2,13.4,16.4,12.2,9.1,10.2,8.1,6.8,6.7,7.7,9.2,8.1,5.7,3.5,3.0,4.2,5.8,5.5,5.1,5.4,5.3,6.5,3.9,1.7,1.1,1.0,3.2,5.2,5.0,2.2,0.2,0.2,0.1,0.1,0.1,0.1,0.1,0.4,1.0,2.0,2.4,0.4,0.1,1.7,5.0,5.3]},
+  sp500:{label:'S&P 500 Annual Return',unit:'%',lowerBetter:false,tier:3,
+    values:[31.7,24.0,-0.4,-1.0,52.6,31.6,6.6,-10.8,43.4,12.0,0.5,26.9,-8.7,22.8,16.5,12.4,-10.1,24.0,11.1,-8.5,4.0,14.3,18.9,-14.7,-26.5,37.2,23.8,-7.2,6.6,18.4,32.4,-4.9,21.4,22.5,6.3,32.2,18.5,5.2,16.6,31.7,-3.1,30.5,7.6,10.1,1.3,37.6,23.0,33.4,28.6,21.0,-9.1,-11.9,-22.1,28.7,10.9,4.9,15.8,5.5,-37.0,26.5,15.1,2.1,16.0,32.4,13.7,1.4,12.0,21.8,-4.4,31.5,-18.1,28.7,26.3,26.3,24.2]},
+  oil:{label:'WTI Crude Oil Price',unit:'$/bbl',lowerBetter:false,tier:3,
+    values:[null,null,null,null,null,null,null,null,null,null,2.6,2.6,2.7,2.8,2.9,2.9,2.9,3.0,3.2,3.1,3.4,3.6,3.5,4.0,9.9,11.0,13.0,14.5,14.0,17.7,33.9,35.2,31.8,29.0,28.8,26.8,14.4,17.7,14.6,17.3,22.2,19.2,18.4,16.3,14.5,16.8,21.9,18.6,19.3,22.9,25.9,26.2,26.2,31.2,41.5,56.6,66.1,72.4,99.6,61.9,79.5,94.9,94.2,97.9,93.2,48.7,43.3,50.8,65.1,57.0,41.4,68.1,94.3,77.6,78.3]},
+  housing:{label:'Housing Starts',unit:'K units',lowerBetter:false,tier:3,
+    values:[1352,1491,1446,1402,1201,1329,1189,1175,1130,1553,1296,1329,1463,1582,1561,1529,1165,1313,1508,1551,1434,2052,2357,2045,1338,1160,1546,2002,2036,1745,1292,1084,1703,2057,1750,1742,1805,1807,1621,1376,1193,1014,1200,1288,1457,1354,1477,1617,1612,1663,1569,1603,1360,1088,1956,2073,1801,1475,1008,554,587,609,780,925,1003,1112,1175,1202,1248,1286,1380,1601,1554,1390,1413]},
+  sentiment:{label:'Consumer Sentiment',unit:'index',lowerBetter:false,tier:3,
+    values:[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,97.9,95.2,84.1,76.4,89.5,92.2,87.7,65.1,67.3,76.8,82.2,88.6,96.0,93.5,87.6,93.3,95.1,90.8,77.5,80.0,89.6,91.7,96.3,102.1,97.3,100.4,100.9,106.8,107.1,89.0,82.6,87.6,95.8,88.5,87.7,85.4,63.8,64.8,74.5,67.3,76.6,77.5,81.7,91.9,91.2,95.3,98.4,96.0,74.1,88.3,65.2,64.5,69.4]},
+  treasury10y:{label:'10-Year Treasury Yield',unit:'%',lowerBetter:false,tier:3,
+    values:[null,null,null,2.7,2.6,2.8,3.0,3.3,3.6,4.4,4.1,3.9,3.8,4.0,4.2,4.2,4.9,5.1,5.6,6.7,7.4,6.2,6.2,6.8,8.1,7.9,7.6,7.4,8.4,9.4,11.5,13.9,13.0,10.8,12.5,10.6,7.7,8.4,9.0,8.5,8.6,7.9,7.0,5.9,7.4,6.6,6.0,6.4,5.6,5.1,6.0,5.0,4.6,4.0,4.3,4.3,4.8,4.6,3.7,2.2,3.2,2.8,1.8,2.4,2.5,2.1,1.8,2.3,2.9,2.1,0.9,1.5,3.0,4.0,3.9]},
+  us_debt:{label:'Total Public Debt ($B)',unit:'$B',lowerBetter:false,tier:3,
+    values:[256.9,255.3,259.1,266.0,270.8,274.4,272.8,270.6,276.3,284.7,
+            286.3,289.0,298.2,305.9,311.7,317.3,319.9,326.2,347.6,353.7,
+            370.9,398.1,427.3,458.2,475.1,533.2,620.4,698.8,771.5,826.5,
+            907.7,997.9,1137.3,1371.7,1564.7,1817.5,2120.6,2346.1,2602.3,2857.4,
+            3206.6,3598.5,4001.8,4351.4,4643.7,4921.0,5181.9,5369.2,5478.2,5606.1,
+            5628.7,5769.9,6198.4,6760.0,7354.7,7905.3,8451.4,8950.7,9986.1,11909.8,
+            13561.6,14764.2,16066.2,16738.2,17824.1,18120.1,19573.4,20244.9,21516.1,22719.4,
+            26945.4,28428.9,30928.9,33167.0,34001.0]},
+};
+
+const EVENTS={
+  shock:[
+    {year:1953,label:'Eisenhower Recession',detail:'Post-Korean War contraction; unemployment rose to 6.1%'},
+    {year:1957,label:'1957\u201358 Recession',detail:'Mild recession; Sputnik-era defense shift and tight monetary policy'},
+    {year:1963,label:'Kennedy Assassination',detail:'Nov 1963 \u2014 Market shock; swift recovery followed'},
+    {year:1965,label:'Vietnam War Escalation',detail:'Military spending surge drove inflation buildup through late 1960s'},
+    {year:1971,label:'Nixon Ends Gold Standard',detail:'Aug 1971 \u2014 Bretton Woods collapse; dollar floated'},
+    {year:1973,label:'OPEC Oil Embargo',detail:'Oct 1973 \u2014 Oil prices quadrupled; stagflation begins. Inflation 11%'},
+    {year:1979,label:'Second Oil Shock',detail:'Iranian Revolution triggered 2nd oil crisis; inflation hit 13.5%'},
+    {year:1980,label:'Volcker Shock',detail:'Fed raised rates to 20% to break inflation; intentional recession'},
+    {year:1987,label:'Black Monday',detail:'Oct 19, 1987 \u2014 S&P fell 22.6% in one day'},
+    {year:1990,label:'Gulf War Recession',detail:'Oil spike + S&L crisis aftermath; mild recession 1990\u201391'},
+    {year:2000,label:'Dot-Com Bust',detail:'NASDAQ fell 78% 2000\u201302; recession began March 2001'},
+    {year:2001,label:'9/11 Attacks',detail:'Sept 2001 \u2014 $40B+ immediate economic impact; defense spending surged'},
+    {year:2007,label:'Global Financial Crisis',detail:'2007\u201309 \u2014 GDP -3.4%, unemployment peaked at 10%'},
+    {year:2014,label:'Oil Price Collapse',detail:'WTI fell from $107 to $37; hurt energy sector'},
+    {year:2020,label:'COVID-19 Pandemic',detail:'GDP fell 3.4%; 22M jobs lost March\u2013April 2020'},
+    {year:2022,label:'Inflation Surge',detail:'CPI hit 8% \u2014 highest since 1981'},
+    {year:2023,label:'Regional Banking Crisis',detail:'SVB, Signature Bank collapse; Fed backstop prevented contagion'}
+  ],
+  legis:[
+    {year:1964,label:'Revenue Act of 1964',detail:'Top tax rate cut from 91%->70%; GDP growth boost'},
+    {year:1965,label:'Medicare & Medicaid',detail:'Largest social insurance expansion since New Deal'},
+    {year:1978,label:'Humphrey-Hawkins Act',detail:'Codified Fed dual mandate: price stability + max employment'},
+    {year:1981,label:'Reagan Tax Cuts (ERTA)',detail:'Top rate cut 70%->50%; largest tax cut to that date'},
+    {year:1986,label:'Tax Reform Act',detail:'Broadened base, cut top rate to 28%; bipartisan overhaul'},
+    {year:1990,label:'PAYGO Budget Act',detail:'Pay-as-you-go rules helped reduce deficit through 1990s'},
+    {year:1993,label:'NAFTA + Deficit Reduction',detail:'Free trade + raised top rate 39.6%; path to 1998 surplus'},
+    {year:1999,label:'Gramm-Leach-Bliley',detail:'Repealed Glass-Steagall; banks + investment merged'},
+    {year:2001,label:'Bush Tax Cuts',detail:'$1.35T 10-yr cut; top rate to 35%'},
+    {year:2008,label:'TARP',detail:'$700B bank bailout; banks stabilized by 2009'},
+    {year:2009,label:'Recovery Act (ARRA)',detail:'$787B stimulus; economists credit 2.5M jobs saved'},
+    {year:2010,label:'Dodd-Frank / ACA',detail:'Wall Street reform + healthcare expansion'},
+    {year:2011,label:'Budget Control Act',detail:'Sequestration; fiscal drag slowed 2013 recovery'},
+    {year:2017,label:'Tax Cuts & Jobs Act',detail:'Corporate rate 35%->21%; $1.5T cost'},
+    {year:2020,label:'CARES Act',detail:'$2.2T COVID relief \u2014 payments, unemployment, PPP'},
+    {year:2021,label:'ARP + Infrastructure',detail:'$1.9T relief + $1.2T bipartisan infrastructure'},
+    {year:2022,label:'IRA + CHIPS Act',detail:'$369B climate/energy + $52B domestic semiconductor production'}
+  ],
+  fedpol:[
+    {year:1979,label:'Volcker Disinflation',detail:'Fed funds hit 20% to break 13% inflation'},
+    {year:1987,label:'Greenspan Era Begins',detail:'Navigated Black Monday; long expansion followed'},
+    {year:2001,label:'Post-Recession Rate Cuts',detail:'Fed cut from 6.5%->1%; later blamed for housing bubble'},
+    {year:2008,label:'QE1 + Zero Rates',detail:'$1.25T asset purchases; rates to 0\u20130.25%'},
+    {year:2010,label:'QE2',detail:'$600B Treasury purchases; extended zero-rate era'},
+    {year:2012,label:'QE3 Open-Ended',detail:'Unlimited monthly purchases until labor improved'},
+    {year:2013,label:'Taper Tantrum',detail:'10-yr yield spiked from 1.6%->3% on taper hint'},
+    {year:2015,label:'Rate Hike Liftoff',detail:'First hike since 2006; zero-rate era ended'},
+    {year:2020,label:'Emergency Zero Rates',detail:'Mar 2020 emergency cut; $700B QE4 launched'},
+    {year:2022,label:'Fastest Hike Cycle Since 1980s',detail:'0%->5.25% in 16 months to fight 8% inflation'},
+    {year:2024,label:'Rate Cuts Resume',detail:'First cut in 4 years; inflation nearing 2% target'}
+  ]
+};
+
+// ================================================================
+// SCORING ENGINE
+// ================================================================
+function getAdminAvg(entity,metricKey,lag=1,eS=1950,eE=2024){
+  var splice=DATA[metricKey]&&DATA[metricKey].spliceYear?DATA[metricKey].spliceYear:0;
+  if(splice>0)eS=Math.max(eS,splice);
+  const m=DATA[metricKey],vals=[];
+  const s=Math.max(entity.start+lag,eS),e=Math.min(entity.end,eE);
+  for(let y=s;y<=e;y++){
+    const i=y-1950;
+    if(i>=0&&i<m.values.length&&m.values[i]!==null)vals.push(m.values[i]);
+  }
+  return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;
+}
+function percentileRank(entities,metricKey,lag=1,eS=1950,eE=2024){
+  const m=DATA[metricKey];
+  const avgs=entities.map(e=>({e,avg:getAdminAvg(e,metricKey,lag,eS,eE)})).filter(x=>x.avg!==null);
+  const allV=avgs.map(x=>x.avg);
+  const mean=allV.reduce((a,b)=>a+b,0)/allV.length;
+  const std=Math.sqrt(allV.map(v=>(v-mean)**2).reduce((a,b)=>a+b,0)/allV.length)||1;
+  return avgs.map(x=>{
+    const rank=avgs.filter(a=>m.lowerBetter?a.avg>x.avg:a.avg<x.avg).length;
+    const pct=Math.round((rank/Math.max(avgs.length-1,1))*100);
+    const z=+((x.avg-mean)/std*(m.lowerBetter?-1:1)).toFixed(2);
+    return {entity:x.e,avg:x.avg,pct,z};
+  });
+}
+function computeScores(eraKey){
+  const era=ERAS[eraKey||currentEra];
+  const eS=era.start,eE=era.end;
+  const metricScores={};
+  const presData={}; PRESIDENTS.forEach(p=>{presData[p.name]={t1:[],t2:[],party:p.party,start:p.start,end:p.end};});
+  const congData={}; CONGRESSES.forEach(c=>{congData[c.name]={t1:[],t2:[],senate:c.senate,house:c.house,start:c.start,end:c.end};});
+  const demT1=[],demT2=[],repT1=[],repT2=[];
+
+  const activeP=PRESIDENTS.filter(p=>p.end>=eS&&p.start<=eE);
+  const activeC=CONGRESSES.filter(c=>c.end>=eS&&c.start<=eE);
+  Object.entries(DATA).forEach(([key,m])=>{
+    if(m.tier===3)return;
+    if(m.derived)return;
+    const pr=percentileRank(activeP,key,1,eS,eE);
+    const cr=percentileRank(activeC,key,2,eS,eE);
+    pr.forEach(r=>{
+      const ps=presData[r.entity.name];
+      if(m.tier===1){ps.t1.push(r.pct);if(r.entity.party===1)demT1.push(r.pct);else repT1.push(r.pct);}
+      if(m.tier===2){ps.t2.push(r.pct);if(r.entity.party===1)demT2.push(r.pct);else repT2.push(r.pct);}
+    });
+    cr.forEach(r=>{
+      const cs=congData[r.entity.name];
+      if(m.tier===1)cs.t1.push(r.pct);
+      if(m.tier===2)cs.t2.push(r.pct);
+    });
+    const dPcts=pr.filter(r=>r.entity.party===1).map(r=>r.pct);
+    const rPcts=pr.filter(r=>r.entity.party===0).map(r=>r.pct);
+    const avg=a=>a.length?Math.round(a.reduce((s,v)=>s+v,0)/a.length):50;
+    const dZ=pr.filter(r=>r.entity.party===1).reduce((s,r)=>s+r.z,0)/Math.max(dPcts.length,1);
+    const rZ=pr.filter(r=>r.entity.party===0).reduce((s,r)=>s+r.z,0)/Math.max(rPcts.length,1);
+    metricScores[key]={demPct:avg(dPcts),repPct:avg(rPcts),demZ:+dZ.toFixed(2),repZ:+rZ.toFixed(2),tier:m.tier,label:m.label,lowerBetter:m.lowerBetter};
+  });
+
+  const avg=a=>a.length?Math.round(a.reduce((s,v)=>s+v,0)/a.length):50;
+  const dT1=avg(demT1),rT1=avg(repT1),dT2=avg(demT2),rT2=avg(repT2);
+  const dO=Math.round(dT1*0.6+dT2*0.4),rO=Math.round(rT1*0.6+rT2*0.4);
+
+  const presidentRankings=activeP.map(p=>{
+    const ps=presData[p.name];
+    const t1=avg(ps.t1),t2=avg(ps.t2),composite=Math.round(t1*0.6+t2*0.4);
+    return {...p,t1,t2,composite};
+  }).sort((a,b)=>b.composite-a.composite);
+
+  const congressRankings=activeC.map(c=>{
+    const cs=congData[c.name];
+    const t1=avg(cs.t1),t2=avg(cs.t2),composite=Math.round(t1*0.6+t2*0.4);
+    return {...c,t1,t2,composite};
+  }).sort((a,b)=>b.composite-a.composite);
+
+  return{metricScores,demT1:dT1,repT1:rT1,demT2:dT2,repT2:rT2,demOverall:dO,repOverall:rO,presidentRankings,congressRankings};
+}
+
+// ================================================================
+// PURE SVG CHART ENGINE
+// ================================================================
+const C={
+  W:900,H:400,ML:58,MR:20,MT:36,MB:44,
+  DEM:'#2563eb',REP:'#dc2626',SPLIT:'#6b7280',
+  SHOCK:'#f59e0b',LEGIS:'#10b981',FED:'#a78bfa',
+  LINE1:'#f59e0b',LINE2:'#10b981',LINE3:'#a78bfa',
+  BG:'#13161e',GRID:'rgba(255,255,255,0.04)',TEXT:'#4a5568',TEXTM:'#8892a4'
+};
+
+function svgEl(tag,attrs={}){
+  const el=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));
+  return el;
+}
+
+function buildSVGChart(containerId,state){
+  const container=document.getElementById(containerId);
+  if(!container)return;
+  container.innerHTML='';
+
+  const metrics=state.metrics||[state.metric];
+  const metric=DATA[metrics[0]];
+  const vals=metric.values;
+  const W=C.W,H=C.H,ML=C.ML,MR=C.MR,MT=C.MT,MB=C.MB;
+  const PW=W-ML-MR,PH=H-MT-MB;
+  const N=YEARS.length;
+
+  // Data range
+  // Y range spans all active metrics
+  const allMetricVals=metrics.flatMap(k=>DATA[k].values.filter(v=>v!==null));
+  const validV=allMetricVals;
+  let yMin=Math.min(...validV),yMax=Math.max(...validV);
+  const pad=(yMax-yMin)*0.12||1;
+  yMin-=pad; yMax+=pad*1.8; // extra top room for event markers
+
+  const xScale=i=>ML+i*(PW/(N-1));
+  const yScale=v=>MT+PH-(((v-yMin)/(yMax-yMin))*PH);
+  const yearToX=y=>xScale(y-1950);
+
+  const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',height:'100%',style:'display:block;background:'+C.BG});
+
+  // ── Party background bands (view + party filter aware) ──
+  const view=state.view||'pres';
+  const partyFilter=state.party||'all';
+  // Determine band color + dim for each year range
+  var getPartyForYear=function(y,viewMode){
+    const pres=PRESIDENTS.find(p=>y>=p.start&&y<=p.end);
+    const senat=SENATE_PARTY[y];
+    const hous=HOUSE_PARTY[y];
+    if(viewMode==='pres')return {pres:pres?pres.party:-1,cong:-1};
+    if(viewMode==='cong'){const maj=(senat===hous&&senat!==2)?senat:2;return{pres:-1,cong:maj};}
+    return{pres:pres?pres.party:-1,cong:(senat===hous&&senat!==2)?senat:2};
+  }
+  var partyVisible=function(p,filter){
+    if(filter==='all')return true;
+    if(filter==='dem')return p===1;
+    if(filter==='rep')return p===0;
+    if(filter==='split')return p===2;
+    return true;
+  }
+  PRESIDENTS.forEach(p=>{
+    const px0=yearToX(p.start),px1=yearToX(Math.min(p.end+1,2024));
+    // Presidential band
+    if(view==='pres'||view==='both'){
+      const visible=partyVisible(p.party,partyFilter);
+      const bandH=view==='both'?PH/2:PH;
+      const col=p.party===1?'rgba(37,99,235,0.10)':'rgba(220,38,38,0.10)';
+      svg.appendChild(svgEl('rect',{x:px0,y:MT,width:Math.max(px1-px0,0),height:bandH,
+        fill:visible?col:'rgba(0,0,0,0)',opacity:visible?1:0}));
+      if(!visible){
+        svg.appendChild(svgEl('rect',{x:px0,y:MT,width:Math.max(px1-px0,0),height:bandH,fill:'rgba(13,15,20,0.55)'}));
+      }
+    }
+    // Congress band (bottom half if both)
+    if(view==='cong'||view==='both'){
+      for(let y=p.start;y<=Math.min(p.end,2024);y++){
+        const cx0=yearToX(y),cx1=yearToX(y+1);
+        const maj=(SENATE_PARTY[y]===HOUSE_PARTY[y]&&SENATE_PARTY[y]!==2)?SENATE_PARTY[y]:2;
+        const visible=partyVisible(maj,partyFilter);
+        const bandY=view==='both'?MT+PH/2:MT;
+        const bandH=view==='both'?PH/2:PH;
+        const col=maj===1?'rgba(37,99,235,0.12)':maj===0?'rgba(220,38,38,0.12)':'rgba(107,114,128,0.10)';
+        svg.appendChild(svgEl('rect',{x:cx0,y:bandY,width:Math.max(cx1-cx0,0),height:bandH,
+          fill:visible?col:'rgba(0,0,0,0)'}));
+        if(!visible){
+          svg.appendChild(svgEl('rect',{x:cx0,y:bandY,width:Math.max(cx1-cx0,0),height:bandH,fill:'rgba(13,15,20,0.55)'}));
+        }
+      }
+    }
+    // President name label
+    const tx=svgEl('text',{x:(px0+px1)/2,y:MT-4,fill:'rgba(255,255,255,0.22)',
+      'font-size':'7','font-family':'IBM Plex Mono','text-anchor':'middle'});
+    tx.textContent=p.name;svg.appendChild(tx);
+  });
+
+  // ── Unified gov overlay ──
+  if(state.showUnified){
+    let inB=false,bStart=0,bParty=-1;
+    [...YEARS,2025].forEach(y=>{
+      const u=UNIFIED[y]??-1;
+      if(u!==-1&&!inB){inB=true;bStart=y;bParty=u;}
+      else if((u===-1||u!==bParty)&&inB){
+        const col=bParty===1?'rgba(37,99,235,0.18)':'rgba(220,38,38,0.18)';
+        const bc=bParty===1?'rgba(37,99,235,0.5)':'rgba(220,38,38,0.5)';
+        const x0=yearToX(bStart),x1=yearToX(Math.min(y,2024));
+        svg.appendChild(svgEl('rect',{x:x0,y:MT,width:Math.max(x1-x0,1),height:PH,fill:col,stroke:bc,'stroke-width':'1','stroke-dasharray':'4,3'}));
+        inB=false;
+        if(u!==-1){inB=true;bStart=y;bParty=u;}
+      }
+    });
+  }
+
+  // ── Grid lines + Y axis ──
+  const nTicks=6;
+  for(let i=0;i<=nTicks;i++){
+    const v=yMin+i*(yMax-yMin)/nTicks;
+    const y=yScale(v);
+    svg.appendChild(svgEl('line',{x1:ML,y1:y,x2:W-MR,y2:y,stroke:C.GRID,'stroke-width':'1'}));
+    const lab=svgEl('text',{x:ML-5,y:y+4,fill:C.TEXT,'font-size':'9','font-family':'IBM Plex Mono','text-anchor':'end'});
+    var dec=state.metrics&&state.metrics[0]?getDecimals(state.metrics[0]):(Math.abs(v)<10?1:0);
+      lab.textContent=Math.abs(v)<0.01?'0':v.toFixed(dec);svg.appendChild(lab);
+  }
+
+  // ── Zero line ──
+  if(yMin<0&&yMax>0){
+    const y0=yScale(0);
+    svg.appendChild(svgEl('line',{x1:ML,y1:y0,x2:W-MR,y2:y0,stroke:'rgba(255,255,255,0.18)','stroke-width':'1','stroke-dasharray':'3,3'}));
+    if(metrics.indexOf('prod_wage_gap')>=0){
+      const zl=svgEl('text',{x:ML+4,y:y0-4,fill:'rgba(255,255,255,0.3)','font-size':'8','font-family':'IBM Plex Mono'});
+      zl.textContent='Parity (wages = productivity)';
+      svg.appendChild(zl);
+    }
+  }
+
+  // ── X axis ticks ──
+  [1950,1960,1970,1980,1990,2000,2010,2020,2024].forEach(yr=>{
+    const x=yearToX(yr);
+    svg.appendChild(svgEl('line',{x1:x,y1:MT+PH,x2:x,y2:MT+PH+4,stroke:C.TEXT,'stroke-width':'1'}));
+    const lab=svgEl('text',{x,y:MT+PH+14,fill:C.TEXT,'font-size':'9','font-family':'IBM Plex Mono','text-anchor':'middle'});
+    lab.textContent=yr;svg.appendChild(lab);
+  });
+
+  // ── Era dimming overlay ──
+  const curEra=ERAS[currentEra];
+  if(curEra.start>1950){const x0=ML,x1=Math.min(yearToX(curEra.start),W-MR);if(x1>x0)svg.appendChild(svgEl("rect",{x:x0,y:MT,width:x1-x0,height:PH,fill:"rgba(13,15,20,0.7)"}));}
+  if(curEra.end<2024){const x0=Math.max(yearToX(curEra.end+1),ML),x1=W-MR;if(x1>x0)svg.appendChild(svgEl("rect",{x:x0,y:MT,width:x1-x0,height:PH,fill:"rgba(13,15,20,0.7)"}));}
+
+  // ── Area fill under line ──
+  const lineColor=METRIC_COLORS[metrics[0]]||(metric.tier===1?C.LINE1:metric.tier===2?C.LINE2:C.LINE3);
+  const areaSegs=[];let seg=[];
+  YEARS.forEach((y,i)=>{if(vals[i]!==null)seg.push(i);else if(seg.length){areaSegs.push(seg);seg=[];}});
+  if(seg.length)areaSegs.push(seg);
+  // Splice year marker
+  (function(){
+    metrics.forEach(function(mKey){
+      var md=DATA[mKey];
+      if(md&&md.spliceYear){
+        var sx=yearToX(md.spliceYear);
+        svg.appendChild(svgEl('line',{x1:sx,y1:MT,x2:sx,y2:MT+PH,stroke:'rgba(245,158,11,0.5)','stroke-width':'1','stroke-dasharray':'4,3'}));
+        var stxt=svgEl('text',{x:sx+3,y:MT+14,fill:'rgba(245,158,11,0.65)','font-size':'7','font-family':'IBM Plex Mono'});
+        stxt.textContent='Methodology change '+md.spliceYear;
+        svg.appendChild(stxt);
+      }
+    });
+  })();
+
+  metrics.forEach((mKey,mIdx)=>{
+    const mData=DATA[mKey];
+    const mVals=mData.values;
+    const mLineColor=METRIC_COLORS[mKey]||(mIdx===0?lineColor:['#60a5fa','#f87171','#34d399','#a78bfa','#fb923c'][mIdx%5]);
+    const mSegs=[];let mSeg=[];
+    YEARS.forEach((y,i)=>{if(mVals[i]!==null)mSeg.push(i);else if(mSeg.length){mSegs.push(mSeg);mSeg=[];}});
+    if(mSeg.length)mSegs.push(mSeg);
+    // Area fill (first metric only)
+    if(mIdx===0){
+      mSegs.forEach(s=>{
+        const pts=s.map(i=>`${xScale(i).toFixed(1)},${yScale(mVals[i]).toFixed(1)}`).join(' ');
+        const bL=`${xScale(s[0]).toFixed(1)},${yScale(Math.max(yMin,0)).toFixed(1)}`;
+        const bR=`${xScale(s[s.length-1]).toFixed(1)},${yScale(Math.max(yMin,0)).toFixed(1)}`;
+        svg.appendChild(svgEl('polygon',{points:`${bL} ${pts} ${bR}`,fill:mLineColor,opacity:'0.07'}));
+      });
+    }
+    // Line
+    mSegs.forEach(s=>{
+      const d='M '+s.map(i=>`${xScale(i).toFixed(1)},${yScale(mVals[i]).toFixed(1)}`).join(' L ');
+      svg.appendChild(svgEl('path',{d,fill:'none',stroke:mLineColor,
+        'stroke-width':mIdx===0?'2.2':'1.8','stroke-linejoin':'round','stroke-linecap':'round',
+        'stroke-dasharray':mIdx===0?'none':mIdx===1?'6,3':mIdx===2?'2,3':'4,2'}));
+    });
+    // End-of-line label for multi-metric
+    if(metrics.length>1){
+      const lastSeg=mSegs[mSegs.length-1];
+      if(lastSeg&&lastSeg.length){
+        const li=lastSeg[lastSeg.length-1];
+        const lbl=svgEl('text',{x:xScale(li)+4,y:yScale(mVals[li]),fill:mLineColor,
+          'font-size':'8','font-family':'IBM Plex Mono','dominant-baseline':'middle'});
+        lbl.textContent=mData.label.split(' ').slice(0,2).join(' ');
+        svg.appendChild(lbl);
+      }
+    }
+  }); // end metrics.forEach
+
+  // ── Event markers (outside metrics loop) ──
+  var markerY=MT+8;
+  var drawMarkers=function(events,col,shape){
+    events.forEach(e=>{
+      if(e.year<1950||e.year>2024)return;
+      const x=yearToX(e.year);
+      const g=svgEl('g',{class:'evt-marker',style:'cursor:pointer'});
+      g.appendChild(svgEl('line',{x1:x,y1:markerY+10,x2:x,y2:MT+PH,stroke:col,opacity:'0.35','stroke-width':'1','stroke-dasharray':'3,3'}));
+      if(shape==='triangle'){
+        const pts=`${x},${markerY} ${x-6},${markerY+10} ${x+6},${markerY+10}`;
+        g.appendChild(svgEl('polygon',{points:pts,fill:col}));
+      } else if(shape==='diamond'){
+        const pts=`${x},${markerY-1} ${x+6},${markerY+5} ${x},${markerY+11} ${x-6},${markerY+5}`;
+        g.appendChild(svgEl('polygon',{points:pts,fill:col}));
+      } else {
+        g.appendChild(svgEl('circle',{cx:x,cy:markerY+5,r:'5',fill:col}));
+      }
+      const tt=svgEl('title');
+      tt.textContent=`${e.label} (${e.year})\n${e.detail}`;
+      g.appendChild(tt);
+      g.addEventListener('mouseenter',ev=>showTooltip(ev,`<strong>${e.label}</strong> (${e.year})<br><span style="color:#8892a4;font-size:0.82em">${e.detail}</span>`,col));
+      g.addEventListener('mouseleave',hideTooltip);
+      svg.appendChild(g);
+    });
+  };
+  var eraBounds=ERAS[currentEra];
+  var eraFiltered=function(evts,type){
+    return evts.filter(function(e,i){
+      var inEra=e.year>=eraBounds.start&&e.year<=eraBounds.end;
+      var ae=state.activeEvents;
+      var active=!ae||ae[type]===undefined||ae[type][i]!==false;
+      return inEra&&active;
+    });
+  };
+  if(state.showShock)drawMarkers(eraFiltered(EVENTS.shock,'shock'),C.SHOCK,'triangle');
+  if(state.showLegis)drawMarkers(eraFiltered(EVENTS.legis,'legis'),C.LEGIS,'diamond');
+  if(state.showFed)drawMarkers(eraFiltered(EVENTS.fedpol,'fedpol'),C.FED,'circle');
+
+  // President lookup helper
+  var presForYear = function(yr) {
+    return PRESIDENTS.find(function(p){ return yr>=p.start && yr<=p.end; });
+  };
+  // ── Per-year hover (multi-metric aware) ──
+  YEARS.forEach((yr,i)=>{
+    const anyVal=metrics.some(k=>DATA[k].values[i]!==null);
+    if(!anyVal)return;
+    const cx=xScale(i);
+    const metricLines=metrics.map(k=>{
+      const v=DATA[k].values[i];
+      if(v===null)return '';
+      const allV=DATA[k].values.filter(x=>x!==null);
+      const mn=allV.reduce((a,b)=>a+b,0)/allV.length;
+      const sd=Math.sqrt(allV.map(x=>(x-mn)**2).reduce((a,b)=>a+b,0)/allV.length)||1;
+      const z=(v-mn)/sd*(DATA[k].lowerBetter?-1:1);
+      const zCol=z>=0?'#10b981':'#f87171';
+      return `<div style='display:flex;justify-content:space-between;gap:1rem;margin-top:0.25rem'>`
+        +`<span style='color:#8892a4;font-size:0.78em'>${DATA[k].label}</span>`
+        +`<span style='font-family:IBM Plex Mono;font-weight:600'>${v.toFixed(getDecimals(k))} ${DATA[k].unit} <span style='color:${zCol};font-size:0.8em'>${z>=0?'+':''}${z.toFixed(2)}&#963;</span></span>`
+        +`</div>`;
+    }).filter(Boolean).join('');
+    const pres=presForYear(yr);
+    const presCol=pres?(pres.party===1?C.DEM:C.REP):lineColor;
+    const presLabel=pres?`<span style='color:${presCol};font-weight:600'>${pres.name}</span> <span style='font-size:0.72em;color:#8892a4'>(${pres.party===1?'D':'R'})</span>`:'Unknown';
+    const ttHtml=`<div style='font-size:0.78em;color:#8892a4;margin-bottom:0.3rem'>${yr} &middot; ${presLabel}</div>${metricLines}`;
+    const firstV=metrics.map(k=>DATA[k].values[i]).find(v=>v!==null);
+    const cy=firstV!=null?yScale(firstV):MT+PH/2;
+    const dot=svgEl('circle',{cx,cy,r:'5',fill:'transparent',stroke:lineColor,'stroke-width':'0'});
+    dot.addEventListener('mouseenter',ev=>{
+      dot.setAttribute('fill',lineColor);dot.setAttribute('stroke-width','2');dot.setAttribute('r','6');
+      showTooltip(ev,ttHtml,lineColor);
+    });
+    dot.addEventListener('mouseleave',()=>{
+      dot.setAttribute('fill','transparent');dot.setAttribute('stroke-width','0');dot.setAttribute('r','5');
+      hideTooltip();
+    });
+    svg.appendChild(dot);
+  });
+
+  // ── Y axis label ──
+  const yl=svgEl('text',{x:10,y:MT+PH/2,fill:C.TEXTM,'font-size':'9','font-family':'IBM Plex Sans',
+    transform:`rotate(-90,10,${MT+PH/2})`,'text-anchor':'middle'});
+  yl.textContent=`${metric.label}${metrics.length>1?' (multi)':' ('+metric.unit+')'}`;svg.appendChild(yl);
+
+  container.appendChild(svg);
+}
+// ── Tooltip ──
+let ttEl=null;
+function showTooltip(ev,html,borderColor='#f59e0b'){
+  if(!ttEl){
+    ttEl=document.createElement('div');
+    ttEl.style.cssText='position:fixed;pointer-events:none;z-index:9999;background:#1a1e28;border:1px solid;border-radius:8px;padding:0.6rem 0.9rem;font-size:0.8rem;color:#e8eaf0;max-width:280px;line-height:1.5;box-shadow:0 8px 24px rgba(0,0,0,0.5)';
+    document.body.appendChild(ttEl);
+  }
+  ttEl.style.borderColor=borderColor;
+  ttEl.innerHTML=html;
+  ttEl.style.display='block';
+  positionTooltip(ev);
+}
+function positionTooltip(ev){
+  if(!ttEl)return;
+  const x=ev.clientX+14,y=ev.clientY-10;
+  const r=ttEl.getBoundingClientRect();
+  ttEl.style.left=Math.min(x,window.innerWidth-r.width-10)+'px';
+  ttEl.style.top=Math.max(y-r.height/2,8)+'px';
+}
+document.addEventListener('mousemove',ev=>{if(ttEl&&ttEl.style.display==='block')positionTooltip(ev);});
+function hideTooltip(){if(ttEl)ttEl.style.display='none';}
+
+// ================================================================
+// CHART STATE + CONTROLS
+// ================================================================
+// ERA SELECTOR FUNCTIONS
+function setEra(eraKey,btn){
+  currentEra=eraKey;
+  const era=ERAS[eraKey];
+  document.querySelectorAll('.era-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const badge=era.label+' '+era.start+'\u2013'+era.end;
+  ['t1','t2','t3'].forEach(t=>{const el=document.getElementById(t+'-era-text');if(el)el.textContent=badge;});
+  const dL=document.getElementById('dem-era-label'),rL=document.getElementById('rep-era-label');
+  if(dL)dL.textContent='Presidencies '+era.start+'\u2013'+era.end;
+  if(rL)rL.textContent='Presidencies '+era.start+'\u2013'+era.end;
+  const sc=document.getElementById('sc-era-range');if(sc)sc.textContent=era.start+'\u2013'+era.end;
+  refreshAll();
+}
+function refreshAll(){
+  const scores=computeScores(currentEra);
+  document.getElementById('dem-overall-score').textContent=scores.demOverall;
+  document.getElementById('rep-overall-score').textContent=scores.repOverall;
+  document.getElementById('dem-t1-val').textContent=scores.demT1;
+  document.getElementById('rep-t1-val').textContent=scores.repT1;
+  document.getElementById('dem-t2-val').textContent=scores.demT2;
+  document.getElementById('rep-t2-val').textContent=scores.repT2;
+  document.getElementById('dem-t1-bar').style.width=scores.demT1+'%';
+  document.getElementById('rep-t1-bar').style.width=scores.repT1+'%';
+  document.getElementById('dem-t2-bar').style.width=scores.demT2+'%';
+  document.getElementById('rep-t2-bar').style.width=scores.repT2+'%';
+  const sd=document.getElementById('sc-dem-big'),sr=document.getElementById('sc-rep-big');
+  if(sd)sd.textContent=scores.demOverall;
+  if(sr)sr.textContent=scores.repOverall;
+  const w=scores.demOverall>=scores.repOverall?'dem':'rep',l=w==='dem'?'rep':'dem';
+  const wt=document.getElementById('sc-'+w+'-tag'),lt=document.getElementById('sc-'+l+'-tag');
+  if(wt)wt.textContent='\uD83C\uDFC6 Higher Score';
+  if(lt)lt.textContent='Lower Score';
+  buildMiniScores(1,'tier1-mini-scores',scores);
+  buildMiniScores(2,'tier2-mini-scores',scores);
+  buildScorecardTable(scores);
+  buildSplitBreakdown(scores);
+  var trajData0 = computeTrajectoryScores(currentEra);
+  buildPresidentRankingsWithTraj(scores, trajData0);
+  buildCongressRankings(scores);
+  buildGapPanel();
+  ['tier1','tier2','tier3'].forEach(tab=>{
+    const el=document.getElementById('chart-'+tab);
+    if(el&&el.querySelector('svg'))buildSVGChart('chart-'+tab,chartState[tab]);
+  });
+}
+
+const chartState={
+  tier1:{metrics:['gdp_growth'],showShock:true,showLegis:true,showFed:true,showUnified:true,view:'pres',party:'all',activeEvents:{shock:{},legis:{},fedpol:{}}},
+  tier2:{metrics:['lfpr'],      showShock:true,showLegis:true,showFed:true,showUnified:true,view:'pres',party:'all',activeEvents:{shock:{},legis:{},fedpol:{}}},
+  tier3:{metrics:['fed_rate'],  showShock:true,showLegis:true,showFed:true,showUnified:true,view:'pres',party:'all',activeEvents:{shock:{},legis:{},fedpol:{}}}
+};
+// Metric unit groups for multi-select compatibility
+const UNIT_GROUPS={
+  pct:['gdp_growth','unemployment','inflation','deficit_gdp','labor_prod','lfpr','real_dpi','poverty','sp500','fed_rate','treasury10y','real_wages','prod_wage_gap'],
+  bn: ['deficit_nominal','us_debt'],
+  idx: ['gini','sentiment'],
+  other:['payrolls','housing','oil']
+};
+// Decimal places for display per metric
+// Custom line colors for specific metrics (overrides tier default)
+var METRIC_COLORS={
+  prod_wage_gap:'#60a5fa',  // blue = derived/unscored
+  real_wages:'#a78bfa',     // purple = spliced series
+  labor_prod:'#f59e0b'      // amber = Tier 1 color even though shown in T2 context
+};
+
+var METRIC_DECIMALS={
+  gini:3, deficit_gdp:1, deficit_nominal:0, us_debt:0,
+  payrolls:1, housing:0, sentiment:1, treasury10y:2, fed_rate:2,
+  prod_wage_gap:2, real_wages:2, labor_prod:2
+};
+function getDecimals(key){
+  return METRIC_DECIMALS[key]!==undefined?METRIC_DECIMALS[key]:2;
+}
+
+function getUnitGroup(key){var e=Object.entries(UNIT_GROUPS);for(var i=0;i<e.length;i++){if(e[i][1].indexOf(key)>=0)return e[i][0];}return 'other';}
+
+
+// Seed activeEvents for each tab \u2014 all on by default
+function seedEvents(){
+  ['tier1','tier2','tier3'].forEach(tab=>{
+    const st=chartState[tab];
+    ['shock','legis','fedpol'].forEach(type=>{
+      const evts=type==='fedpol'?EVENTS.fedpol:EVENTS[type];
+      evts.forEach((e,i)=>{ st.activeEvents[type][i]=true; });
+    });
+  });
+}
+
+function setView(tab,view,btn){
+  chartState[tab].view=view;
+  document.querySelectorAll(`#tab-${tab} .view-btn`).forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  // Show/hide gap note on tier2
+  var gapNote = document.getElementById('t2-gap-note');
+  if(gapNote){
+    var hasPWG = chartState['tier2'].metrics.indexOf('prod_wage_gap') >= 0;
+    gapNote.style.display = (tab === 'tier2' && hasPWG) ? 'block' : 'none';
+  }
+  buildSVGChart('chart-'+tab,chartState[tab]);
+}
+function setParty(tab,party,btn){
+  chartState[tab].party=party;
+  document.querySelectorAll(`#tab-${tab} .party-btn`).forEach(b=>{
+    b.classList.remove('active-all','active-dem','active-rep','active-split');
+  });
+  const cls={all:'active-all',dem:'active-dem',rep:'active-rep',split:'active-split'}[party];
+  btn.classList.add(cls);
+  buildSVGChart('chart-'+tab,chartState[tab]);
+}
+
+function setMetric(tab,key,btn,evt){
+  var st=chartState[tab];
+  var grp=getUnitGroup(key);
+  if(evt&&evt.shiftKey){
+    var currentGrp=getUnitGroup(st.metrics[0]);
+    if(grp!==currentGrp){return;}
+    var idx=st.metrics.indexOf(key);
+    if(idx>=0&&st.metrics.length>1){st.metrics.splice(idx,1);btn.classList.remove('active','multi-active');}
+    else if(idx<0){st.metrics.push(key);btn.classList.add('active','multi-active');}
+  } else {
+    st.metrics=[key];
+    document.querySelectorAll('#'+tab+'-metric-btns .metric-btn').forEach(function(b){b.classList.remove('active','multi-active','disabled');});
+    btn.classList.add('active');
+  }
+  var activeGrp=getUnitGroup(st.metrics[0]);
+  var firstMetricLabel=DATA[st.metrics[0]]?DATA[st.metrics[0]].label:'';
+  document.querySelectorAll('#'+tab+'-metric-btns .metric-btn').forEach(function(b){
+    var oc=b.getAttribute('onclick')||'';
+    var m=oc.match(/'([a-z0-9_]+)'/g);
+    var bKey=m&&m[1]?m[1].replace(/'/g,''):'';
+    if(bKey&&st.metrics.indexOf(bKey)<0){
+      var incompatible=getUnitGroup(bKey)!==activeGrp;
+      b.classList.toggle('disabled',incompatible);
+      b.title=incompatible?'Different unit - cannot combine with '+firstMetricLabel:'';
+    }
+  });
+  buildSVGChart('chart-'+tab,chartState[tab]);
+}
+function togglePicker(t){
+  const btn=document.getElementById(t+'-picker-toggle');
+  const panel=document.getElementById(t+'-picker-panel');
+  const tab={'t1':'tier1','t2':'tier2','t3':'tier3'}[t];
+  btn.classList.toggle('open');
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open'))buildPickerPanel(t,tab);
+}
+function buildPickerPanel(t,tab){
+  const panel=document.getElementById(t+'-picker-panel');
+  const st=chartState[tab];
+  const era=ERAS[currentEra];
+  let html='';
+  // All/None row
+  html+=`<div class='picker-all-row'>`
+    +`<span style='font-size:0.72rem;color:var(--text-muted);margin-right:0.5rem'>Quick select:</span>`
+    +`<button class='picker-all-btn' onclick='pickerAll("${t}","${tab}",true)'>All</button>`
+    +`<button class='picker-all-btn' onclick='pickerAll("${t}","${tab}",false)'>None</button>`
+    +`<span style='font-size:0.68rem;color:var(--text-dim);margin-left:0.75rem;font-style:italic'>`
+    +`Greyed = outside active era</span>`
+    +`</div>`;
+  ['shock','legis','fedpol'].forEach(type=>{
+    const evts=type==='fedpol'?EVENTS.fedpol:EVENTS[type];
+    const title=type==='shock'?'Economic Shocks':type==='legis'?'Legislation':'Fed Policy';
+    const col=type==='shock'?'var(--shock)':type==='legis'?'var(--legis)':'var(--fed)';
+    html+=`<div>`
+      +`<div class='picker-col-title' style='color:${col}'>${title}</div>`
+      +`<div class='picker-check-list'>`;
+    evts.forEach((e,i)=>{
+      const checked=st.activeEvents[type][i]!==false;
+      const inEra=e.year>=era.start&&e.year<=era.end;
+      html+=`<label class='picker-item${!inEra?' era-hidden':''}'>`
+        +`<input type='checkbox' ${checked?'checked':''} onchange='toggleEvent("${t}","${tab}","${type}",${i},this.checked)'>`
+        +`<span>${e.year} &mdash; ${e.label}</span>`
+        +`</label>`;
+    });
+    html+=`</div></div>`;
+  });
+  panel.innerHTML=html;
+}
+function pickerAll(t,tab,val){
+  const st=chartState[tab];
+  ['shock','legis','fedpol'].forEach(type=>{
+    const evts=type==='fedpol'?EVENTS.fedpol:EVENTS[type];
+    evts.forEach((_,i)=>st.activeEvents[type][i]=val);
+  });
+  buildPickerPanel(t,tab);
+  buildSVGChart('chart-'+tab,st);
+}
+function toggleEvent(t,tab,type,idx,val){
+  chartState[tab].activeEvents[type][idx]=val;
+  buildSVGChart('chart-'+tab,chartState[tab]);
+}
+
+function toggleAnnot(tab,type,btn){
+  const k=type==='shock'?'showShock':type==='legis'?'showLegis':'showFed';
+  chartState[tab][k]=!chartState[tab][k];
+  btn.classList.toggle('off',!chartState[tab][k]);
+  buildSVGChart(`chart-${tab}`,chartState[tab]);
+}
+function toggleUnified(tab,btn){
+  chartState[tab].showUnified=!chartState[tab].showUnified;
+  btn.classList.toggle('active',chartState[tab].showUnified);
+  buildSVGChart(`chart-${tab}`,chartState[tab]);
+}
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+tabId).classList.add('active');
+  const tabs=['overview','tier1','tier2','tier3','scorecard'];
+  document.querySelectorAll('.nav-tab')[tabs.indexOf(tabId)].classList.add('active');
+  if(['tier1','tier2','tier3'].includes(tabId)){
+    setTimeout(()=>buildSVGChart(`chart-${tabId}`,chartState[tabId]),10);
+  }
+}
+
+// ================================================================
+// UI BUILDERS
+// ================================================================
+function buildMiniScores(tier,containerId,scores){
+  const c=document.getElementById(containerId);if(!c)return;
+  c.innerHTML=Object.entries(scores.metricScores).filter(([k,v])=>v.tier===tier).map(([key,s])=>`
+    <div class="mini-score-card">
+      <div class="mini-score-metric">${s.label}</div>
+      <div class="mini-score-bars">
+        <div class="mini-bar-row">
+          <span class="mini-bar-label" style="color:var(--dem)">D</span>
+          <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${s.demPct}%;background:var(--dem)"></div></div>
+          <span class="mini-bar-val score-hoverable" data-z="${s.demZ}" data-pct="${s.demPct}" data-party="D" data-label="${s.label}">${s.demPct}<sup style="font-size:0.5em">pct</sup></span>
+        </div>
+        <div class="mini-bar-row">
+          <span class="mini-bar-label" style="color:var(--rep)">R</span>
+          <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${s.repPct}%;background:var(--rep)"></div></div>
+          <span class="mini-bar-val score-hoverable" data-z="${s.repZ}" data-pct="${s.repPct}" data-party="R" data-label="${s.label}">${s.repPct}<sup style="font-size:0.5em">pct</sup></span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function buildScorecardTable(scores){
+  const tbody=document.getElementById('scorecard-body');if(!tbody)return;
+  let html='';
+  [1,2].forEach(tier=>{
+    html+=`<tr><td colspan="6" class="tier-section-head">TIER ${tier} \u2014 ${tier===1?'Core Metrics (60% weight)':'Supporting Metrics (40% weight)'}</td></tr>`;
+    Object.entries(scores.metricScores).filter(([k,v])=>v.tier===tier).forEach(([key,s])=>{
+      const w=s.demPct>s.repPct?'D':s.repPct>s.demPct?'R':'tie';
+      const wb=w==='D'?'<span class="win-badge dem">D</span>':w==='R'?'<span class="win-badge rep">R</span>':'<span class="win-badge tie">\u2014</span>';
+      html+=`<tr>
+        <td><strong>${s.label}</strong></td>
+        <td style="font-size:0.72rem;color:var(--text-dim)">${s.lowerBetter?'lower lower = better':'higher higher = better'}</td>
+        <td><div class="pct-bar-wrap"><div class="pct-bar-track"><div class="pct-bar-fill" style="width:${s.demPct}%;background:var(--dem)"></div></div>
+          <span class="score-cell dem score-hoverable" data-z="${s.demZ}" data-pct="${s.demPct}" data-party="D" data-label="${s.label}">${s.demPct}th</span></div></td>
+        <td><div class="pct-bar-wrap"><div class="pct-bar-track"><div class="pct-bar-fill" style="width:${s.repPct}%;background:var(--rep)"></div></div>
+          <span class="score-cell rep score-hoverable" data-z="${s.repZ}" data-pct="${s.repPct}" data-party="R" data-label="${s.label}">${s.repPct}th</span></div></td>
+        <td class="winner-cell">${wb}</td>
+        <td style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim)">${tier===1?'60%':'40%'}</td>
+      </tr>`;
+    });
+  });
+  tbody.innerHTML=html;
+}
+
+function buildPresidentRankings_legacy(scores){
+  const el=document.getElementById('president-rankings-table');if(!el)return;
+  var medals=['#1','#2','#3'];
+  el.innerHTML=`<table class="president-table"><thead><tr>
+    <th style="width:36px">Rank</th><th>President</th><th>Years</th>
+    <th>Tier 1</th><th>Tier 2</th><th>Composite</th>
+  </tr></thead><tbody>${scores.presidentRankings.map((p,i)=>{
+    const col=p.party===1?'var(--dem)':'var(--rep)';
+    const bg=p.party===1?'rgba(37,99,235,0.15)':'rgba(220,38,38,0.15)';
+    return `<tr>
+      <td class="rank-num">${i<3?medals[i]:'#'+(i+1)}</td>
+      <td><span class="pres-party-dot" style="background:${col}"></span>
+          <span class="pres-name">${p.name}</span>
+          <span style="margin-left:.4rem;font-size:.65rem;padding:.1rem .4rem;border-radius:3px;background:${bg};color:${col}">${p.party===1?'D':'R'}</span></td>
+      <td class="pres-years">${p.start}\u2013${p.end}</td>
+      <td><div class="pct-bar-wrap"><div class="pct-bar-track" style="width:80px"><div class="pct-bar-fill" style="width:${p.t1}%;background:${col}"></div></div><span style="font-family:var(--font-mono);font-size:.78rem;color:${col}">${p.t1}</span></div></td>
+      <td><div class="pct-bar-wrap"><div class="pct-bar-track" style="width:80px"><div class="pct-bar-fill" style="width:${p.t2}%;background:${col};opacity:.7"></div></div><span style="font-family:var(--font-mono);font-size:.78rem;color:${col};opacity:.8">${p.t2}</span></div></td>
+      <td><span style="font-family:var(--font-mono);font-weight:600;font-size:1rem;color:${col}">${p.composite}</span></td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+function buildCongressRankings(scores){
+  const el=document.getElementById('congress-rankings-table');if(!el)return;
+  var medals=['#1','#2','#3'];
+  el.innerHTML=`<table class="president-table"><thead><tr>
+    <th style="width:36px">Rank</th><th>Congress</th><th>Years</th>
+    <th>Chambers</th><th>Tier 1</th><th>Tier 2</th><th>Composite</th>
+  </tr></thead><tbody>${scores.congressRankings.map((c,i)=>{
+    const sCol=c.senate===1?'var(--dem)':c.senate===0?'var(--rep)':'var(--split)';
+    const hCol=c.house===1?'var(--dem)':c.house===0?'var(--rep)':'var(--split)';
+    const sBg=c.senate===1?'rgba(37,99,235,.15)':c.senate===0?'rgba(220,38,38,.15)':'rgba(107,114,128,.15)';
+    const hBg=c.house===1?'rgba(37,99,235,.15)':c.house===0?'rgba(220,38,38,.15)':'rgba(107,114,128,.15)';
+    const dom=c.senate===c.house?(c.senate===1?'var(--dem)':c.senate===0?'var(--rep)':'var(--split)'):'var(--split)';
+    return `<tr>
+      <td class="rank-num">${i<3?medals[i]:'#'+(i+1)}</td>
+      <td><span class="pres-name">${c.name}</span></td>
+      <td class="pres-years">${c.start}\u2013${c.end}</td>
+      <td>
+        <span style="font-size:.7rem;padding:.1rem .5rem;border-radius:3px;margin-right:.25rem;background:${sBg};color:${sCol}">S:${c.senate===1?'D':c.senate===0?'R':'Split'}</span>
+        <span style="font-size:.7rem;padding:.1rem .5rem;border-radius:3px;background:${hBg};color:${hCol}">H:${c.house===1?'D':c.house===0?'R':'Split'}</span>
+      </td>
+      <td><div class="pct-bar-wrap"><div class="pct-bar-track" style="width:80px"><div class="pct-bar-fill" style="width:${c.t1}%;background:${dom}"></div></div><span style="font-family:var(--font-mono);font-size:.78rem;color:${dom}">${c.t1}</span></div></td>
+      <td><div class="pct-bar-wrap"><div class="pct-bar-track" style="width:80px"><div class="pct-bar-fill" style="width:${c.t2}%;background:${dom};opacity:.7"></div></div><span style="font-family:var(--font-mono);font-size:.78rem;color:${dom};opacity:.8">${c.t2}</span></div></td>
+      <td><span style="font-family:var(--font-mono);font-weight:600;font-size:1rem;color:${dom}">${c.composite}</span></td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+function buildSplitBreakdown(scores){
+  const el=document.getElementById('split-unified-breakdown');if(!el)return;
+  const uD=[],uR=[],sp=[];
+  YEARS.forEach(y=>{const u=UNIFIED[y];if(u===1)uD.push(y);else if(u===0)uR.push(y);else sp.push(y);});
+  const gdp=DATA.gdp_growth.values;
+  const ag=ys=>{const v=ys.map(y=>gdp[y-1950]).filter(v=>v!==null);return v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):'N/A';};
+  el.innerHTML=`
+    <div style="margin-bottom:.75rem"><span style="color:var(--dem)">&#9679;</span> <strong style="color:var(--text)">Unified Democratic</strong><br>${uD.length} years \u00b7 Avg GDP: <strong style="color:var(--dem)">${ag(uD)}%</strong></div>
+    <div style="margin-bottom:.75rem"><span style="color:var(--rep)">&#9679;</span> <strong style="color:var(--text)">Unified Republican</strong><br>${uR.length} years \u00b7 Avg GDP: <strong style="color:var(--rep)">${ag(uR)}%</strong></div>
+    <div><span style="color:var(--split)">&#9679;</span> <strong style="color:var(--text)">Divided Government</strong><br>${sp.length} years \u00b7 Avg GDP: <strong style="color:var(--text-muted)">${ag(sp)}%</strong></div>`;
+}
+
+// ================================================================
+// INIT
+// ================================================================
+
+// ================================================================
+// PRODUCTIVITY-WAGE GAP PANEL
+// ================================================================
+function buildGapPanel(){
+  var prod=DATA.labor_prod.values;
+  var wage=DATA.real_wages.values;
+  var gap=DATA.prod_wage_gap.values;
+
+  // Era summary cards
+  var grid=document.getElementById('gap-era-grid');
+  if(!grid)return;
+  var eraCards='';
+  Object.entries(ERAS).forEach(function(entry){
+    var eKey=entry[0],era=entry[1];
+    if(eKey==='all')return;
+    var pVals=[],wVals=[],gVals=[];
+    for(var y=era.start;y<=era.end;y++){
+      var i=y-1950;
+      if(prod[i]!=null)pVals.push(prod[i]);
+      if(wage[i]!=null&&y>=1979)wVals.push(wage[i]);
+      if(gap[i]!=null)gVals.push(gap[i]);
+    }
+    var avgP=pVals.length?(pVals.reduce(function(a,b){return a+b;},0)/pVals.length).toFixed(1):'N/A';
+    var avgW=wVals.length?(wVals.reduce(function(a,b){return a+b;},0)/wVals.length).toFixed(1):'N/A';
+    var avgG=gVals.length?(gVals.reduce(function(a,b){return a+b;},0)/gVals.length).toFixed(1):'N/A';
+    var gNum=parseFloat(avgG);
+    var gCol=isNaN(gNum)?'var(--text-muted)':gNum>1?'#f87171':gNum<0?'#10b981':'#f59e0b';
+    var gInterp=isNaN(gNum)?'':gNum>2?'Wages lagging significantly':gNum>0.5?'Wages lagging':gNum<-0.5?'Wages outpacing productivity':'Near parity';
+    eraCards+=(
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem">'
+      +'<div style="font-family:var(--font-mono);font-size:0.62rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">'+era.label+'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:0.5rem">'
+      +'<div><div style="font-size:0.65rem;color:var(--text-dim)">Productivity</div>'
+      +'<div style="font-family:var(--font-mono);font-size:1rem;font-weight:600;color:#10b981">'+avgP+'%</div></div>'
+      +'<div><div style="font-size:0.65rem;color:var(--text-dim)">Wages</div>'
+      +'<div style="font-family:var(--font-mono);font-size:1rem;font-weight:600;color:#60a5fa">'+avgW+'%</div></div>'
+      +'<div><div style="font-size:0.65rem;color:var(--text-dim)">Gap</div>'
+      +'<div style="font-family:var(--font-mono);font-size:1rem;font-weight:600;color:'+gCol+'">'+avgG+'%</div></div>'
+      +'</div>'
+      +'<div style="font-size:0.72rem;color:'+gCol+';font-style:italic">'+gInterp+'</div>'
+      +'</div>'
+    );
+  });
+  grid.innerHTML=eraCards;
+
+  // Per-president table
+  var tbody=document.getElementById('gap-table-body');
+  if(!tbody)return;
+  var rows=PRESIDENTS.map(function(p){
+    var pVals=[],wVals=[],gVals=[];
+    for(var y=p.start+1;y<=p.end;y++){
+      var i=y-1950;
+      if(prod[i]!=null)pVals.push(prod[i]);
+      if(wage[i]!=null&&y>=1979)wVals.push(wage[i]);
+      if(gap[i]!=null)gVals.push(gap[i]);
+    }
+    var avgP=pVals.length?(pVals.reduce(function(a,b){return a+b;},0)/pVals.length):null;
+    var avgW=wVals.length?(wVals.reduce(function(a,b){return a+b;},0)/wVals.length):null;
+    var avgG=gVals.length?(gVals.reduce(function(a,b){return a+b;},0)/gVals.length):null;
+    return {p:p,avgP:avgP,avgW:avgW,avgG:avgG};
+  }).sort(function(a,b){return (a.avgG||99)-(b.avgG||99);});
+
+  var rowHtml=rows.map(function(r,idx){
+    var p=r.p;
+    var pCol=p.party===1?'var(--dem)':'var(--rep)';
+    var pLabel=p.party===1?'D':'R';
+    var pBg=p.party===1?'rgba(37,99,235,0.15)':'rgba(220,38,38,0.15)';
+    var gVal=r.avgG!==null?r.avgG.toFixed(1)+'%':'N/A*';
+    var gCol=r.avgG===null?'var(--text-dim)':r.avgG>1?'#f87171':r.avgG<0?'#10b981':'#f59e0b';
+    var interp=r.avgG===null?'Pre-1979 (no scored wages)':r.avgG>2?'Wages lagging significantly':r.avgG>0.5?'Wages lagging productivity':r.avgG<-0.5?'Wages outpacing productivity':'Near parity';
+    return '<tr>'
+      +'<td><strong>'+p.name+'</strong> <span style="font-size:0.68rem;color:var(--text-muted)">'+p.start+'–'+p.end+'</span></td>'
+      +'<td><span style="font-size:0.7rem;padding:0.1rem 0.45rem;border-radius:3px;background:'+pBg+';color:'+pCol+'">'+pLabel+'</span></td>'
+      +'<td style="font-family:var(--font-mono);color:#10b981">'+(r.avgP!==null?r.avgP.toFixed(1)+'%':'N/A')+'</td>'
+      +'<td style="font-family:var(--font-mono);color:#60a5fa">'+(r.avgW!==null?r.avgW.toFixed(1)+'%':'N/A*')+'</td>'
+      +'<td style="font-family:var(--font-mono);font-weight:600;color:'+gCol+'">'+gVal+'</td>'
+      +'<td style="font-size:0.75rem;color:'+gCol+';font-style:italic">'+interp+'</td>'
+      +'</tr>';
+  }).join('');
+  tbody.innerHTML=rowHtml;
+}
+
+
+// ================================================================
+// TRAJECTORY SCORING + INHERITED CONDITIONS
+// ================================================================
+
+// Tier 1 metrics used for trajectory scoring
+var TRAJ_METRICS = ['gdp_growth','unemployment','inflation','deficit_gdp','labor_prod'];
+
+// Get the inherited value for a metric at presidential lag start
+function getInheritedVal(president, metricKey) {
+  var lagYear = president.start + 1;
+  var idx = lagYear - 1950;
+  var vals = DATA[metricKey].values;
+  // Average the inauguration year and prior year for stability
+  var v1 = (idx > 0 && vals[idx-1] != null) ? vals[idx-1] : null;
+  var v2 = (idx >= 0 && idx < vals.length && vals[idx] != null) ? vals[idx] : null;
+  if (v1 != null && v2 != null) return (v1 + v2) / 2;
+  return v2 || v1;
+}
+
+// Get the exit value (last year of administration)
+function getExitVal(president, metricKey) {
+  var idx = president.end - 1950;
+  var vals = DATA[metricKey].values;
+  var v1 = (idx >= 0 && vals[idx] != null) ? vals[idx] : null;
+  var v2 = (idx > 0 && vals[idx-1] != null) ? vals[idx-1] : null;
+  if (v1 != null && v2 != null) return (v1 + v2) / 2;
+  return v1 || v2;
+}
+
+// Compute trajectory delta (exit - entry), sign-adjusted for lower-is-better metrics
+function getTrajectoryDelta(president, metricKey) {
+  var entry = getInheritedVal(president, metricKey);
+  var exit_ = getExitVal(president, metricKey);
+  if (entry == null || exit_ == null) return null;
+  var delta = exit_ - entry;
+  // For lower-is-better metrics, negative delta = improvement = positive score
+  if (DATA[metricKey].lowerBetter) delta = -delta;
+  return delta;
+}
+
+// Compute trajectory percentile scores for all presidents
+function computeTrajectoryScores(eraKey) {
+  var era = ERAS[eraKey || currentEra];
+  var eS = era.start, eE = era.end;
+  var activeP = PRESIDENTS.filter(function(p) { return p.end >= eS && p.start <= eE; });
+
+  var trajScores = {}; // presName -> {t1: [], composite, t1perMetric: {}}
+
+  TRAJ_METRICS.forEach(function(mKey) {
+    var deltas = activeP.map(function(p) {
+      return { p: p, delta: getTrajectoryDelta(p, mKey) };
+    }).filter(function(x) { return x.delta != null; });
+
+    if (deltas.length < 2) return;
+
+    // Rank by delta
+    deltas.forEach(function(item) {
+      var rank = deltas.filter(function(a) { return a.delta < item.delta; }).length;
+      var pct = Math.round((rank / Math.max(deltas.length - 1, 1)) * 100);
+      if (!trajScores[item.p.name]) {
+        trajScores[item.p.name] = { party: item.p.party, t1: [], perMetric: {} };
+      }
+      trajScores[item.p.name].t1.push(pct);
+      trajScores[item.p.name].perMetric[mKey] = pct;
+    });
+  });
+
+  // Compute composite trajectory score
+  var avg = function(arr) { return arr.length ? Math.round(arr.reduce(function(a,b){return a+b;},0)/arr.length) : null; };
+
+  var presRankings = activeP.map(function(p) {
+    var ts = trajScores[p.name];
+    var t1 = ts ? avg(ts.t1) : null;
+    return { name: p.name, party: p.party, start: p.start, end: p.end,
+             trajT1: t1, trajComposite: t1, perMetric: ts ? ts.perMetric : {} };
+  }).filter(function(x) { return x.trajT1 != null; })
+    .sort(function(a,b) { return b.trajComposite - a.trajComposite; });
+
+  // Party-level trajectory scores
+  var demTraj = presRankings.filter(function(x){return x.party===1;}).map(function(x){return x.trajT1;});
+  var repTraj = presRankings.filter(function(x){return x.party===0;}).map(function(x){return x.trajT1;});
+
+  return {
+    presRankings: presRankings,
+    demTraj: avg(demTraj) || 50,
+    repTraj: avg(repTraj) || 50
+  };
+}
+
+// ── SCORE MODE TOGGLE ──
+var currentScoreMode = 'abs'; // 'abs' | 'traj' | 'both'
+
+var SCORE_MODE_DESCS = {
+  abs:  '<strong style="color:var(--text-muted)">Absolute:</strong> Percentile rank vs all administrations 1950&#8211;2024. Higher = better performance regardless of starting conditions.',
+  traj: '<strong style="color:#60a5fa">Trajectory:</strong> Percentile rank of <em>improvement</em> during the term vs. inherited baseline. Rewards presidents who turned bad situations around. Tier 1 metrics only.',
+  both: '<strong style="color:var(--gold)">Absolute</strong> + <strong style="color:#60a5fa">Trajectory</strong> side by side. Where they diverge most tells you how much inherited conditions shaped the record.'
+};
+
+function setScoreMode(mode, btn) {
+  currentScoreMode = mode;
+  document.querySelectorAll('.score-mode-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  var desc = document.getElementById('score-mode-desc');
+  if (desc) desc.innerHTML = SCORE_MODE_DESCS[mode];
+  var modeLabel = document.getElementById('sc-mode-label');
+  if (modeLabel) modeLabel.textContent = mode === 'abs' ? 'Absolute Performance' : mode === 'traj' ? 'Trajectory (Inherited Adjusted)' : 'Absolute + Trajectory';
+  refreshScoreDisplay();
+}
+
+function refreshScoreDisplay() {
+  var absScores = computeScores(currentEra);
+  var trajData  = computeTrajectoryScores(currentEra);
+  updateScorecardDisplay(absScores, trajData);
+  buildPresidentRankingsWithTraj(absScores, trajData);
+}
+
+function updateScorecardDisplay(absScores, trajData) {
+  // Update big numbers on scorecard banner
+  var sdBig = document.getElementById('sc-dem-big');
+  var srBig = document.getElementById('sc-rep-big');
+  if (!sdBig || !srBig) return;
+
+  if (currentScoreMode === 'abs') {
+    sdBig.textContent = absScores.demOverall;
+    srBig.textContent = absScores.repOverall;
+  } else if (currentScoreMode === 'traj') {
+    sdBig.textContent = trajData.demTraj != null ? trajData.demTraj : '--';
+    srBig.textContent = trajData.repTraj != null ? trajData.repTraj : '--';
+  } else {
+    // Both mode — show abs with traj in smaller text below
+    sdBig.innerHTML = absScores.demOverall
+      + '<div style="font-size:1.5rem;color:#60a5fa;font-weight:500">' + (trajData.demTraj||'--') + '</div>';
+    srBig.innerHTML = absScores.repOverall
+      + '<div style="font-size:1.5rem;color:#60a5fa;font-weight:500">' + (trajData.repTraj||'--') + '</div>';
+  }
+
+  var w, l;
+  if (currentScoreMode === 'traj') {
+    w = (trajData.demTraj||0) >= (trajData.repTraj||0) ? 'dem' : 'rep';
+  } else {
+    w = absScores.demOverall >= absScores.repOverall ? 'dem' : 'rep';
+  }
+  l = w === 'dem' ? 'rep' : 'dem';
+  var wt = document.getElementById('sc-' + w + '-tag');
+  var lt = document.getElementById('sc-' + l + '-tag');
+  if (wt) wt.textContent = '\uD83C\uDFC6 Higher Score';
+  if (lt) lt.textContent = 'Lower Score';
+}
+
+// ── INHERITED CONDITIONS ──
+function getInheritedConditions(president) {
+  var lagYear = president.start + 1;
+  var conditions = [];
+  var keyMetrics = ['gdp_growth','unemployment','inflation','deficit_gdp','labor_prod'];
+  var labels = ['GDP Growth','Unemployment','CPI Inflation','Deficit % GDP','Labor Productivity'];
+
+  // Historical averages for context coloring
+  var avgs = {};
+  keyMetrics.forEach(function(k) {
+    var vals = DATA[k].values.filter(function(v){return v!=null;});
+    avgs[k] = vals.reduce(function(a,b){return a+b;},0)/vals.length;
+  });
+
+  keyMetrics.forEach(function(k, i) {
+    var idx = lagYear - 1950;
+    var vals = DATA[k].values;
+    var v = null;
+    // Use average of inauguration year and prior year
+    var v1 = (idx > 0 && vals[idx-1] != null) ? vals[idx-1] : null;
+    var v2 = (idx >= 0 && idx < vals.length && vals[idx] != null) ? vals[idx] : null;
+    if (v1 != null && v2 != null) v = (v1 + v2) / 2;
+    else v = v2 || v1;
+
+    if (v == null) return;
+
+    // Determine if inherited condition is good or bad
+    var bad = DATA[k].lowerBetter ? v > avgs[k] : v < avgs[k];
+    var diff = v - avgs[k];
+    var pctDiff = avgs[k] !== 0 ? Math.abs(diff / avgs[k] * 100) : 0;
+    var severity = pctDiff > 30 ? 'severe' : pctDiff > 15 ? 'notable' : 'mild';
+
+    conditions.push({
+      key: k, label: labels[i], value: v, avg: avgs[k],
+      bad: bad, severity: severity,
+      color: bad ? (severity === 'severe' ? '#f87171' : '#fbbf24') : '#10b981'
+    });
+  });
+  return conditions;
+}
+
+function toggleInherited(presName) {
+  var row = document.getElementById('inh-' + presName.replace(/[^a-z]/gi,'_'));
+  if (row) row.classList.toggle('open');
+}
+
+// ── PER-PRESIDENT TABLE WITH TRAJECTORY + INHERITED ──
+function buildPresidentRankingsWithTraj(absScores, trajData) {
+  var el = document.getElementById('president-rankings-table');
+  if (!el) return;
+
+  var medals = ['#1','#2','#3'];
+  var showAbs  = currentScoreMode === 'abs'  || currentScoreMode === 'both';
+  var showTraj = currentScoreMode === 'traj' || currentScoreMode === 'both';
+
+  // Merge abs + traj data
+  var allPres = absScores.presidentRankings.map(function(p) {
+    var td = trajData.presRankings.find(function(t){return t.name===p.name;});
+    return Object.assign({}, p, { trajT1: td ? td.trajT1 : null, trajPM: td ? td.perMetric : {} });
+  });
+
+  // Sort based on mode
+  if (currentScoreMode === 'traj') {
+    allPres = allPres.filter(function(p){return p.trajT1!=null;})
+                     .sort(function(a,b){return b.trajT1-a.trajT1;});
+  } else {
+    allPres = allPres.sort(function(a,b){return b.composite-a.composite;});
+  }
+
+  // Build header
+  var headerCols = '<th style="width:36px">Rank</th><th>President</th><th>Years</th>';
+  if (showAbs)  headerCols += '<th><span class="abs-col">Abs T1</span></th><th><span class="abs-col">Abs T2</span></th><th><span class="abs-col">Composite</span></th>';
+  if (showTraj) headerCols += '<th><span class="traj-col">Traj Score</span></th>';
+  if (currentScoreMode === 'both') headerCols += '<th>Divergence</th>';
+  headerCols += '<th style="width:100px">Inherited</th>';
+
+  var rows = allPres.map(function(p, i) {
+    var col = p.party === 1 ? 'var(--dem)' : 'var(--rep)';
+    var bg  = p.party === 1 ? 'rgba(37,99,235,0.15)' : 'rgba(220,38,38,0.15)';
+    var pl  = p.party === 1 ? 'D' : 'R';
+    var safeId = p.name.replace(/[^a-z]/gi,'_');
+
+    var absCols = '';
+    if (showAbs) {
+      absCols = '<td><div class="pct-bar-wrap"><div class="pct-bar-track" style="width:70px"><div class="pct-bar-fill" style="width:'+p.t1+'%;background:'+col+'"></div></div><span style="font-family:var(--font-mono);font-size:0.78rem;color:'+col+'">'+p.t1+'</span></div></td>'
+        + '<td><div class="pct-bar-wrap"><div class="pct-bar-track" style="width:70px"><div class="pct-bar-fill" style="width:'+p.t2+'%;background:'+col+';opacity:0.7"></div></div><span style="font-family:var(--font-mono);font-size:0.78rem;color:'+col+';opacity:0.8">'+p.t2+'</span></div></td>'
+        + '<td><span style="font-family:var(--font-mono);font-weight:700;font-size:1rem;color:'+col+'">'+p.composite+'</span></td>';
+    }
+
+    var trajCol = '';
+    if (showTraj) {
+      if (p.trajT1 != null) {
+        var tc = p.trajT1 >= 60 ? '#10b981' : p.trajT1 <= 40 ? '#f87171' : '#f59e0b';
+        trajCol = '<td><span style="font-family:var(--font-mono);font-weight:700;font-size:1rem;color:'+tc+'">'+p.trajT1+'</span></td>';
+      } else {
+        trajCol = '<td style="font-size:0.7rem;color:var(--text-dim)">N/A</td>';
+      }
+    }
+
+    var divergeCol = '';
+    if (currentScoreMode === 'both' && p.trajT1 != null) {
+      var diff = p.trajT1 - p.composite;
+      var diffCls = diff > 10 ? 'better' : diff < -10 ? 'worse' : 'same';
+      var diffSign = diff > 0 ? '+' : '';
+      divergeCol = '<td><span class="score-diff '+diffCls+'">'+diffSign+diff+'</span></td>';
+    } else if (currentScoreMode === 'both') {
+      divergeCol = '<td></td>';
+    }
+
+    // Inherited conditions (collapsed by default)
+    var conditions = getInheritedConditions(p);
+    var inhCells = conditions.map(function(c) {
+      return '<div class="inh-item">'
+        + '<div class="inh-label">'+c.label+'</div>'
+        + '<div class="inh-value" style="color:'+c.color+'">'+c.value.toFixed(getDecimals(c.key))+(c.key!=='gini'&&c.key!=='deficit_nominal'&&c.key!=='us_debt'?'%':'')+'</div>'
+        + '<div class="inh-context" style="color:'+c.color+'">'+(c.bad?'Bad inherit':'Good inherit')+'</div>'
+        + '</div>';
+    }).join('');
+
+    var inhBtn = '<td><button class="inh-toggle-btn" onclick="toggleInherited(\''+p.name+'\')">'
+      + '&#9660; Inherited</button></td>';
+
+    var inhRow = '<tr class="inherited-row" id="inh-'+safeId+'">'
+      + '<td colspan="20"><div class="inherited-cells">'
+      + '<div style="font-size:0.7rem;color:var(--text-dim);margin-right:0.5rem">Conditions inherited by <strong style="color:var(--text-muted)">'+p.name+'</strong> (~'+( p.start+1)+'):</div>'
+      + inhCells
+      + '</div></td></tr>';
+
+    var mainRow = '<tr>'
+      + '<td class="rank-num">'+(i<3?medals[i]:'#'+(i+1))+'</td>'
+      + '<td><span class="pres-party-dot" style="background:'+col+'"></span>'
+      + '<span class="pres-name">'+p.name+'</span> '
+      + '<span style="font-size:0.65rem;padding:0.1rem 0.4rem;border-radius:3px;background:'+bg+';color:'+col+'">'+pl+'</span></td>'
+      + '<td class="pres-years">'+p.start+'\u2013'+p.end+'</td>'
+      + absCols + trajCol + divergeCol + inhBtn
+      + '</tr>'
+      + inhRow;
+
+    return mainRow;
+  }).join('');
+
+  el.innerHTML = '<table class="president-table"><thead><tr>'+headerCols+'</tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+
+document.addEventListener('DOMContentLoaded',()=>{
+  seedEvents();
+  const scores=computeScores('all');
+
+  // Overview cards
+  document.getElementById('dem-overall-score').textContent=scores.demOverall;
+  document.getElementById('rep-overall-score').textContent=scores.repOverall;
+  ['t1','t2'].forEach(t=>{
+    const dv=scores[`dem${t.toUpperCase()}`]??scores[`demT${t[1]}`];
+    const rv=scores[`rep${t.toUpperCase()}`]??scores[`repT${t[1]}`];
+    // direct access
+  });
+  document.getElementById('dem-t1-val').textContent=scores.demT1;
+  document.getElementById('rep-t1-val').textContent=scores.repT1;
+  document.getElementById('dem-t2-val').textContent=scores.demT2;
+  document.getElementById('rep-t2-val').textContent=scores.repT2;
+  document.getElementById('dem-t1-bar').style.width=scores.demT1+'%';
+  document.getElementById('rep-t1-bar').style.width=scores.repT1+'%';
+  document.getElementById('dem-t2-bar').style.width=scores.demT2+'%';
+  document.getElementById('rep-t2-bar').style.width=scores.repT2+'%';
+
+
+  document.getElementById('sc-dem-big').textContent=scores.demOverall;
+  document.getElementById('sc-rep-big').textContent=scores.repOverall;
+  const scW=scores.demOverall>=scores.repOverall?'dem':'rep';
+  document.getElementById(`sc-${scW}-tag`).textContent='\uD83C\uDFC6 Higher Score';
+  document.getElementById(`sc-${scW==='dem'?'rep':'dem'}-tag`).textContent='Lower Score';
+
+  buildMiniScores(1,'tier1-mini-scores',scores);
+  buildMiniScores(2,'tier2-mini-scores',scores);
+  buildScorecardTable(scores);
+  buildSplitBreakdown(scores);
+  var trajData = computeTrajectoryScores(currentEra);
+  buildPresidentRankingsWithTraj(scores, trajData);
+  buildCongressRankings(scores);
+  buildGapPanel();
+
+  // Wire up score-hoverable tooltips (delegated)
+  document.addEventListener('mouseover', function(ev) {
+    var el = ev.target.closest('.score-hoverable');
+    if (!el) return;
+    var z = parseFloat(el.dataset.z);
+    var pct = el.dataset.pct;
+    var party = el.dataset.party;
+    var label = el.dataset.label || '';
+    var partyCol = party === 'D' ? '#2563eb' : '#dc2626';
+    var partyName = party === 'D' ? 'Democratic administrations' : 'Republican administrations';
+    var zColor = z >= 0 ? '#10b981' : '#f87171';
+    var zSign = z >= 0 ? '+' : '';
+    var absZ = Math.abs(z);
+    var interp;
+    if (absZ < 0.3) { interp = 'Near average performance'; }
+    else if (absZ < 0.75) { interp = (z >= 0 ? 'Somewhat above' : 'Somewhat below') + ' average'; }
+    else if (absZ < 1.5) { interp = (z >= 0 ? 'Notably above' : 'Notably below') + ' average'; }
+    else { interp = (z >= 0 ? 'Exceptional' : 'Well below') + ' historical average'; }
+    var html = '<div style="font-size:0.75em;color:#8892a4;margin-bottom:0.35rem">' + label + '</div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;gap:1.5rem;margin-bottom:0.4rem">'
+      + '<span style="color:' + partyCol + ';font-weight:600;font-size:0.85em">' + partyName + '</span>'
+      + '<span style="font-family:IBM Plex Mono,monospace;font-weight:700;color:' + partyCol + ';font-size:1.1em">' + pct + 'th pct.</span>'
+      + '</div>'
+      + '<div style="padding-top:0.4rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center;gap:1rem">'
+      + '<span style="color:#8892a4;font-size:0.78em">Z-score vs 1950-2024 mean</span>'
+      + '<span style="font-family:IBM Plex Mono,monospace;font-weight:600;color:' + zColor + '">' + zSign + z.toFixed(2) + '\u03c3</span>'
+      + '</div>'
+      + '<div style="margin-top:0.35rem;font-size:0.72em;color:#4a5568">' + interp + '</div>';
+    showTooltip(ev, html, partyCol);
+  });
+  document.addEventListener('mouseout', function(ev) {
+    var rel = ev.relatedTarget;
+    if (!rel || !rel.closest('.score-hoverable')) hideTooltip();
+  });
+});
+
+// ── Zoom Feature ──
+var zoomLevels={tier1:1,tier2:1,tier3:1};
+var zoomSteps=[0.5,0.75,1,1.5,2,3,4];
+function chartZoom(tab,dir){
+  var cur=zoomLevels[tab];
+  var idx=zoomSteps.indexOf(cur);
+  if(idx===-1)idx=2;
+  var ni=Math.max(0,Math.min(zoomSteps.length-1,idx+dir));
+  zoomLevels[tab]=zoomSteps[ni];
+  applyZoom(tab);
+}
+function chartZoomReset(tab){zoomLevels[tab]=1;applyZoom(tab);}
+function applyZoom(tab){
+  var level=zoomLevels[tab];
+  var inner=document.getElementById(tab+'-zoom-inner');
+  var chartDiv=document.getElementById('chart-'+tab);
+  var label=document.getElementById(tab+'-zoom-label');
+  if(!inner||!chartDiv)return;
+  if(label)label.textContent=Math.round(level*100)+'%';
+  var baseWidth=inner.parentElement?inner.parentElement.offsetWidth:900;
+  var newWidth=Math.round(baseWidth*level);
+  chartDiv.style.width=newWidth+'px';
+  chartDiv.style.minWidth=newWidth+'px';
+  buildSVGChart('chart-'+tab,chartState[tab]);
+  inner.scrollLeft=level>1?(newWidth-inner.offsetWidth)/2:0;
+}
+
+
+
+</script>
+</body>
+</html>
